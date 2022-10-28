@@ -4,25 +4,17 @@ declare(strict_types=1);
 
 namespace DaveSnake;
 
+use DaveSnake\Engine\Engine;
+
 class Router
 {
     private $request;
-    private static $instance = null;
 
     public function __construct(RequestInterface $request)
     {
         $this->request = $request;
         $this->bootstrapRoutes();
     }
-
-//    public function getInstance()
-//    {
-//        if(!self::$instance) {
-//            self::$instance = new Router();
-//        }
-//
-//        return self::$instance;
-//    }
 
     public function bootstrapRoutes()
     {

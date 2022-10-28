@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DaveSnake;
+namespace DaveSnake\Engine;
 
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
