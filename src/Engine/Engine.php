@@ -24,8 +24,8 @@ class Engine
         $this->me->tail = end($this->me->body);
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
 
-        $this->avoidWalls = new AvoidWalls($this->possibleMoves, $this->board, $this->me);
-        $this->avoidSnakes = new AvoidSnakes($this->possibleMoves, $this->board, $this->me);
+        $this->avoidWalls = new AvoidWalls($this->board, $this->me);
+        $this->avoidSnakes = new AvoidSnakes($this->board, $this->me);
     }
 
     private function lookForFood($spaces)

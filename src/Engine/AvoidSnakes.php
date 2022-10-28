@@ -10,13 +10,11 @@ use DaveSnake\Models\Board;
 class AvoidSnakes
 {
     public $board;
-    public $possibleMoves;
     public $me;
 
-    public function __construct(array $possibleMoves, Board $board, BattleSnake $me)
+    public function __construct(Board $board, BattleSnake $me)
     {
         $this->board = $board;
-        $possibleMoves = $possibleMoves;
         $this->me = $me;
     }
 

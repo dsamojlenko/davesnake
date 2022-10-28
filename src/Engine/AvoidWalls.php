@@ -21,7 +21,7 @@ class AvoidWalls
   public function getMoves($possibleMoves)
   {
       // Check for walls
-      foreach(possibleMoves as $move) {
+      foreach($possibleMoves as $move) {
           // Check up
           if ($this->me->head->y + 1 > $this->board->height-1) {
               $possibleMoves = array_filter($possibleMoves, function($move) {
