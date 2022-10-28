@@ -28,13 +28,7 @@ class Request implements RequestInterface
 
         if ($this->REQUEST_METHOD == "POST")
         {
-            $body = array();
-            foreach($_POST as $key => $value)
-            {
-                $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-
-            return $body;
+          return json_decode(file_get_contents('php://input'));
         }
     }
 }

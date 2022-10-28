@@ -44,10 +44,9 @@ class Router
                 Api::startResponse();
                 break;
             case "/move":
-                //Move Section
-                // read the incoming request body stream and decode the JSON
-                $data = json_decode(file_get_contents('php://input'));
-
+                //Move Section          
+                $data = $this->request->getBody();
+                
                 $board = $data->board;
                 $me = $data->you;
 
