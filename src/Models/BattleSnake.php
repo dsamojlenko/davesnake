@@ -12,7 +12,7 @@ class BattleSnake
     public array $body;
     public string $latency;
     public Coordinates $head;
-    public integer $length;
+    public int $length;
     public string $shout;
     public string $squad;
     public object $customizations;
@@ -24,7 +24,7 @@ class BattleSnake
         $this->health = $data->health;
         $this->body = $data->body;
         $this->latency = $data->latency;
-        $this->head = $data->head;
+        $this->head = new Coordinates($data->head);
         $this->length = $data->length;
         $this->shout = $data->shout;
         $this->squad = $data->squad;
