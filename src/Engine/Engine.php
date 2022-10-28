@@ -20,38 +20,8 @@ class Engine
         $this->board = new Board($data->board);
         $this->me = new BattleSnake($data->you);
         $this->me->tail = end($this->me->body);
-        $this->possibleMoves = ['up', 'down', 'left', 'right'];
-    }
 
-    private function avoidWalls()
-    {
-        // Check for walls
-        foreach($this->possibleMoves as $move) {
-            // Check up
-            if ($this->me->head->y + 1 > $this->board->height-1) {
-                $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                    return $move !== "up";
-                });
-            }
-            // Check down
-            if ($this->me->head->y -1 < 0) {
-                $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                    return $move !== "down";
-                });
-            }
-            // Check left
-            if ($this->me->head->x -1 < 0) {
-                $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                    return $move !== "left";
-                });
-            }
-            // Check right
-            if ($this->me->head->x + 1 > $this->board->width-1) {
-                $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                    return $move !== "right";
-                });
-            }
-        }
+        $this->possibleMoves = ['up', 'down', 'left', 'right'];
     }
 
     private function avoidSnakes()
@@ -132,7 +102,10 @@ class Engine
 
     public function getMove()
     {
-        $this->avoidWalls();
+        // Avoid walls
+        $avoidWalls = new AvoidWalls($this->possibleMoves, $this->board);
+        $this->possibleMoves = $avoidWalls->getMoves();
+
         $this->avoidSnakes();
 
         if (!$move = $this->lookForFood(1)) {
