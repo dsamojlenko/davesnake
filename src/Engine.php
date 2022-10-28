@@ -6,9 +6,9 @@ namespace DaveSnake;
 
 class Engine
 {
-    private object $data;
-    private object $me;
-    private object $board;
+    private $data;
+    private $me;
+    private $board;
     private array $possibleMoves;
 
     public function __construct($data)
