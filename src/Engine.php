@@ -130,7 +130,7 @@ class Engine
         // Default random in case the below choices don't work out
         $move = $this->possibleMoves[array_rand($this->possibleMoves)];
 
-        error_log("Moving: " . $move ? $move : "Oh no, nowhere to go!");
+        error_log("Moving: " . ($move ? $move : "Oh no, nowhere to go!"));
 
         return $move ? $move : "up";
     }
