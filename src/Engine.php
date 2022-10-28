@@ -17,8 +17,8 @@ class Engine
     public function __construct($data)
     {
         $this->data = $data;
-        $this->board = $data->board;
-        $this->me = $data->you;
+        $this->board = new Board($data->board);
+        $this->me = new BattleSnake($data->you);
         $this->me->tail = end($this->me->body);
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
     }
