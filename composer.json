@@ -1,7 +1,11 @@
 {
   "require": {
-    "php": "^7.3.0"
   },
   "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "DaveSnake\\": "src/"
+    }
   }
 }
