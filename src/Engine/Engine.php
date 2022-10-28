@@ -13,6 +13,8 @@ class Engine
     private BattleSnake $me;
     private Board $board;
     private array $possibleMoves;
+    private $avoidWalls;
+    private $avoidSnakes;
 
     public function __construct($data)
     {
@@ -20,45 +22,10 @@ class Engine
         $this->board = new Board($data->board);
         $this->me = new BattleSnake($data->you);
         $this->me->tail = end($this->me->body);
-
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
-    }
 
-    private function avoidSnakes()
-    {
-        // Avoid snakes
-        foreach ($this->board->snakes as $snake) {
-            foreach($snake->body as $part) {
-                if($this->me->head->y + 1 == $part->y && $this->me->head->x == $part->x) {
-                    if(!($this->me->head->y + 1 == $this->me->tail->y && $this->me->head->x == $this->me->tail->x)) {
-                        $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                            return $move !== "up";
-                        });
-                    }
-                }
-                if($this->me->head->y - 1 == $part->y && $this->me->head->x == $part->x) {
-                    if(!($this->me->head->y - 1 == $this->me->tail->y && $this->me->head->x == $this->me->tail->x)) {
-                        $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                            return $move !== "down";
-                        });
-                    }
-                }
-                if($this->me->head->x + 1 == $part->x && $this->me->head->y == $part->y) {
-                    if(!($this->me->head->x + 1 == $this->me->tail->x && $this->me->head->y == $this->me->tail->y)) {
-                        $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                            return $move !== "right";
-                        });
-                    }
-                }
-                if($this->me->head->x - 1 == $part->x && $this->me->head->y == $part->y) {
-                    if(!($this->me->head->x - 1 == $this->me->tail->x && $this->me->head->y == $this->me->tail->y)) {
-                        $this->possibleMoves = array_filter($this->possibleMoves, function($move) {
-                            return $move !== "left";
-                        });
-                    }
-                }
-            }
-        }
+        $this->avoidWalls = new AvoidWalls($this->possibleMoves, $this->board, $this->me);
+        $this->avoidSnakes = new AvoidSnakes($this->possibleMoves, $this->board, $this->me);
     }
 
     private function lookForFood($spaces)
@@ -102,12 +69,8 @@ class Engine
 
     public function getMove()
     {
-        // Avoid walls
-        $avoidWalls = new AvoidWalls($this->possibleMoves, $this->board, $this->me);
-        $this->possibleMoves = $avoidWalls->getMoves();
-        error_log(print_r($this->possibleMoves, true));
-
-        $this->avoidSnakes();
+        $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves);
+        $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
 
         $move =  $this->possibleMoves[array_rand($this->possibleMoves)];
       
