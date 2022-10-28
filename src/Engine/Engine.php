@@ -103,16 +103,19 @@ class Engine
     public function getMove()
     {
         // Avoid walls
-        $avoidWalls = new AvoidWalls($this->possibleMoves, $this->board);
+        $avoidWalls = new AvoidWalls($this->possibleMoves, $this->board, $this->me);
         $this->possibleMoves = $avoidWalls->getMoves();
+        error_log(print_r($this->possibleMoves, true));
 
         $this->avoidSnakes();
 
-        if (!$move = $this->lookForFood(1)) {
-          if (!$move = $this->lookForFood(2)) {
-            $move =  $this->possibleMoves[array_rand($this->possibleMoves)];
-          }
-        }
+        $move =  $this->possibleMoves[array_rand($this->possibleMoves)];
+      
+        // if (!$move = $this->lookForFood(1)) {
+        //   if (!$move = $this->lookForFood(2)) {
+        //     $move =  $this->possibleMoves[array_rand($this->possibleMoves)];
+        //   }
+        // }
       
         error_log("Moving: " . ($move ? $move : "Oh no, nowhere to go!"));
 
