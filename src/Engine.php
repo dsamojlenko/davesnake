@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace DaveSnake;
 
+use DaveSnake\Models\BattleSnake;
+use DaveSnake\Models\Board;
+
 class Engine
 {
     private $data;
-    private $me;
-    private $board;
+    private BattleSnake $me;
+    private Board $board;
     private array $possibleMoves;
 
     public function __construct($data)
