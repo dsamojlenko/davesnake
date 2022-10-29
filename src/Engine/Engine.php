@@ -40,6 +40,7 @@ class Engine
 
         $move = false;
 
+        // Look one space away
         foreach ($this->possibleMoves as $checkMove) {
             if ($this->nearbyFood->findFood($checkMove, 1)) {
                 $move = $checkMove;
@@ -48,6 +49,7 @@ class Engine
             }
         }
 
+        // Look a little further away
         if (!$move) {
             foreach ($this->possibleMoves as $checkMove) {
                 if ($this->nearbyFood->findFood($checkMove, 2)) {
