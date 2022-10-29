@@ -1,6 +1,7 @@
 {
   "require": {
-    "heroku/heroku-buildpack-php": "^226.0"
+    "heroku/heroku-buildpack-php": "^226.0",
+    "jmgq/a-star": "^2.1"
   },
   "autoload": {
     "psr-4": {
