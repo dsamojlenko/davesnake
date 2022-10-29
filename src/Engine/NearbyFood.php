@@ -20,20 +20,9 @@ class NearbyFood
         $this->me = new BattleSnake($data->you);
     }
 
-    public function findFood(array $possibleMoves, int $range)
+    public function findFood(array $possibleMoves)
     {
-        // Look around the immediate area
-//        for ($distance = 0; $distance <= $range; $distance++) {
-//            foreach ($possibleMoves as $move) {
-//                if ($this->checkForFood($this->getTarget($move, $distance))) {
-//                    error_log("[NearbyFood] Found food " . $distance . " spaces away");
-//                    return $move;
-//                }
-//            }
-//        }
-
-        // nothing in range, where the hell is the food?
-        error_log("[NearbyFood] Nothing nearby, looking around");
+        error_log("[NearbyFood] Looking for food");
         if (count($this->board->food)) {
             $foodDistances = [];
 
@@ -59,32 +48,12 @@ class NearbyFood
                 return $a->distance <=> $b->distance;
             });
 
-            // error_log("[NearbyFood] " . print_r($foodDistances, true));
-
             $closest = new Coordinates($foodDistances[0]);
 
-            error_log("[NearbyFood] Next closest " . print_r($closest, true));
+            error_log("[NearbyFood] Closest " . print_r($closest, true));
 
-            $targetDirections = [];
+            $targetDirections = array_values(array_intersect($this->getTargetDirections($closest), $possibleMoves));
 
-            if ($closest->x < $this->me->head->x) {
-                array_push($targetDirections, Move::$LEFT);
-            }
-
-            if ($closest->x > $this->me->head->x) {
-                array_push($targetDirections, Move::$RIGHT);
-            }
-
-            if ($closest->y < $this->me->head->y) {
-                array_push($targetDirections, Move::$DOWN);
-            }
-
-            if ($closest->y > $this->me->head->y) {
-                array_push($targetDirections, Move::$UP);
-            }
-
-            $targetDirections = array_values(array_intersect($targetDirections, $possibleMoves));
-            
             if (count($targetDirections)) {
               error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
               return $targetDirections[0];
@@ -131,4 +100,31 @@ class NearbyFood
 //        }
 //        return false;
 //    }
+    /**
+     * @param Coordinates $closest
+     * @param array $possibleMoves
+     * @return array
+     */
+    public function getTargetDirections(Coordinates $closest): array
+    {
+        $targetDirections = [];
+
+        if ($closest->x < $this->me->head->x) {
+            array_push($targetDirections, Move::$LEFT);
+        }
+
+        if ($closest->x > $this->me->head->x) {
+            array_push($targetDirections, Move::$RIGHT);
+        }
+
+        if ($closest->y < $this->me->head->y) {
+            array_push($targetDirections, Move::$DOWN);
+        }
+
+        if ($closest->y > $this->me->head->y) {
+            array_push($targetDirections, Move::$UP);
+        }
+
+        return $targetDirections;
+    }
 }

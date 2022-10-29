@@ -30,7 +30,7 @@ class Engine
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
 
         // If there's food within one or two spaces, grab it
-        $move = $this->nearbyFood->findFood($this->possibleMoves, 1);
+        $move = $this->nearbyFood->findFood($this->possibleMoves);
 
         // finally, random
         if (!$move) {
