@@ -32,6 +32,28 @@ class NearbyFood
             }
         }
 
+        // nothing in range, where the hell is the food?
+        $foodDistances = [];
+
+        foreach ($this->board->food as $food) {
+            $distancex = $this->me->head->x - $food->x;
+            $distancey = $this->me->head->y - $food->y;
+
+            if ($distancex < 0) {
+                $distancex *= -1;
+            }
+            if ($distancey < 0) {
+                $distancey *= -1;
+            }
+
+            array_push($foodDistances, (object) [
+                "x" => $food->x,
+                "y" => $food->y,
+                "distance" => $distancex + $distancey,
+            ]);
+        }
+        error_log("[NearbyFood] " . print_r($foodDistances, true));
+
         error_log("[NearbyFood] Nothing close by");
         return false;
     }
