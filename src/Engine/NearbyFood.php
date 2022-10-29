@@ -22,7 +22,7 @@ class NearbyFood
 
     public function findFood(array $possibleMoves, int $range)
     {
-        // Look one space away
+        // Look around the immediate area
         for ($distance = 0; $distance <= $range; $distance++) {
             foreach ($possibleMoves as $move) {
                 if ($this->checkForFood($this->getTarget($move, $distance))) {
@@ -33,35 +33,60 @@ class NearbyFood
         }
 
         // nothing in range, where the hell is the food?
-        $foodDistances = [];
+        if (count($this->board->food)) {
+            $foodDistances = [];
 
-        foreach ($this->board->food as $food) {
-            $distancex = $this->me->head->x - $food->x;
-            $distancey = $this->me->head->y - $food->y;
+            foreach ($this->board->food as $food) {
+                $distancex = $this->me->head->x - $food->x;
+                $distancey = $this->me->head->y - $food->y;
 
-            if ($distancex < 0) {
-                $distancex *= -1;
+                if ($distancex < 0) {
+                    $distancex *= -1;
+                }
+                if ($distancey < 0) {
+                    $distancey *= -1;
+                }
+
+                array_push($foodDistances, (object)[
+                    "x" => $food->x,
+                    "y" => $food->y,
+                    "distance" => $distancex + $distancey,
+                ]);
             }
-            if ($distancey < 0) {
-                $distancey *= -1;
+
+            usort($foodDistances, function ($a, $b) {
+                return $a->distance > $b->distance;
+            });
+
+            // error_log("[NearbyFood] " . print_r($foodDistances, true));
+
+            $closest = new Coordinates($foodDistances[0]);
+
+            error_log("[NearbyFood] Next closest " . print_r($closest, true));
+
+            $possibleMoves = [];
+
+            if ($closest->x < $this->me->head->x) {
+                array_push($possibleMoves, MoveTypes::$LEFT);
             }
 
-            array_push($foodDistances, (object) [
-                "x" => $food->x,
-                "y" => $food->y,
-                "distance" => $distancex + $distancey,
-            ]);
+            if ($closest->x > $this->me->head->x) {
+                array_push($possibleMoves, MoveTypes::$RIGHT);
+            }
+
+            if ($closest->y < $this->me->head->y) {
+                array_push($possibleMoves, MoveTypes::$DOWN);
+            }
+
+            if ($closest->y > $this->me->head->y) {
+                array_push($possibleMoves, MoveTypes::$UP);
+            }
+
+            error_log("[NearbyFood] Nothing close by, heading further afield " . $possibleMoves[0]);
+            return $possibleMoves[0];
         }
 
-        usort($foodDistances, function($a, $b) {
-            return $a->distance > $b->distance;
-        });
-
-        error_log("[NearbyFood] " . print_r($foodDistances, true));
-
-
-
-        error_log("[NearbyFood] Nothing close by");
+        error_log("[NearbyFood] No food!");
         return false;
     }
 
