@@ -7,6 +7,7 @@ namespace DaveSnake\Engine;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
+use DaveSnake\Models\MoveTypes;
 
 class NearbyFood
 {
@@ -47,19 +48,19 @@ class NearbyFood
         $y = 0;
 
         switch($move) {
-            case 'up':
+            case MoveTypes::$UP:
                 $x = $this->me->head->x;
                 $y = $this->me->head->y + $distance;
                 break;
-            case 'down':
+            case MoveTypes::$DOWN:
                 $x = $this->me->head->x;
                 $y = $this->me->head->y - $distance;
                 break;
-            case 'left':
+            case MoveTypes::$LEFT:
                 $x = $this->me->head->x - $distance;
                 $y = $this->me->head->y;
                 break;
-            case 'right':
+            case MoveTypes::$RIGHT:
                 $x = $this->me->head->x + $distance;
                 $y = $this->me->head->y;
                 break;
