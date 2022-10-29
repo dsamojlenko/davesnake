@@ -4,13 +4,12 @@
 namespace DaveSnake\Engine\Concerns;
 
 
-use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Coordinates;
 use DaveSnake\Models\Move;
 
 trait IdentifiesLocations
 {
-    private BattleSnake $me;
+    // private BattleSnake $me;
 
     public function getTarget(string $move, int $distance): Coordinates
     {
