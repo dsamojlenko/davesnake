@@ -6,6 +6,7 @@ namespace DaveSnake\Engine;
 
 use DaveSnake\Models\Board;
 use DaveSnake\Models\BattleSnake;
+use DaveSnake\Models\MoveTypes;
 
 class AvoidWalls
 {
@@ -18,33 +19,32 @@ class AvoidWalls
         $this->me = new BattleSnake($data->you);
     }
 
+    private function eliminateMove($possibleMoves, $eliminated): array
+    {
+        return array_filter($possibleMoves, function($move) use ($eliminated) {
+            return $move !== $eliminated;
+        });
+    }
+
   public function getMoves($possibleMoves)
   {
       // Check for walls
       foreach($possibleMoves as $move) {
           // Check up
           if ($this->me->head->y + 1 > $this->board->height-1) {
-              $possibleMoves = array_filter($possibleMoves, function($move) {
-                  return $move !== "up";
-              });
+              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$UP);
           }
           // Check down
           if ($this->me->head->y -1 < 0) {
-              $possibleMoves = array_filter($possibleMoves, function($move) {
-                  return $move !== "down";
-              });
+              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$DOWN);
           }
           // Check left
           if ($this->me->head->x -1 < 0) {
-              $possibleMoves = array_filter($possibleMoves, function($move) {
-                  return $move !== "left";
-              });
+              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$LEFT);
           }
           // Check right
           if ($this->me->head->x + 1 > $this->board->width-1) {
-              $possibleMoves = array_filter($possibleMoves, function($move) {
-                  return $move !== "right";
-              });
+              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$RIGHT);
           }
       }
       
