@@ -14,4 +14,12 @@ class Coordinates
       $this->x = $data->x;
       $this->y = $data->y;
     }
+
+    public function getLocationId(Coordinates $coordinates, Board $board)
+    {
+        if($fullRows = $coordinates->y) {
+            return ($fullRows * $board->width) + $coordinates->x + 1;
+        }
+        return $coordinates->x + 1;
+    }
 }
