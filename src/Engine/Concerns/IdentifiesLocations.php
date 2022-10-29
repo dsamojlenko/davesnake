@@ -62,4 +62,31 @@ trait IdentifiesLocations
 
         return $targetDirections;
     }
+
+    public function getDistanceToTarget(Coordinates $target): int
+    {
+        $distanceX = $this->me->head->x - $target->x;
+        $distanceY = $this->me->head->y - $target->y;
+
+        if ($distanceX < 0) {
+            $distanceX *= -1;
+        }
+        if ($distanceX < 0) {
+            $distanceX *= -1;
+        }
+
+        return $distanceX + $distanceY;
+    }
+
+    public function getAdjacentCells(Coordinates $target): array
+    {
+        $targetId = $target->getLocationId($this->board);
+
+        $left = $targetId - 1;
+        $right = $targetId + 1;
+        $down = $targetId - $this->board->width;
+        $up = $targetId + $this->board->width;
+
+        return [$left, $right, $down, $up];
+    }
 }

@@ -55,20 +55,10 @@ class NearbyFood
         $foodTargets = [];
 
         foreach ($this->board->food as $food) {
-            $distancex = $this->me->head->x - $food->x;
-            $distancey = $this->me->head->y - $food->y;
-
-            if ($distancex < 0) {
-                $distancex *= -1;
-            }
-            if ($distancey < 0) {
-                $distancey *= -1;
-            }
-
             array_push($foodTargets, (object)[
                 "x" => $food->x,
                 "y" => $food->y,
-                "distance" => $distancex + $distancey,
+                "distance" => $this->getDistanceToTarget(new Coordinates($food)),
             ]);
         }
 
