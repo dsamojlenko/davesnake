@@ -64,26 +64,28 @@ class NearbyFood
 
             error_log("[NearbyFood] Next closest " . print_r($closest, true));
 
-            $possibleMoves = [];
+            $moves = [];
 
             if ($closest->x < $this->me->head->x) {
-                array_push($possibleMoves, MoveTypes::$LEFT);
+                array_push($moves, MoveTypes::$LEFT);
             }
 
             if ($closest->x > $this->me->head->x) {
-                array_push($possibleMoves, MoveTypes::$RIGHT);
+                array_push($moves, MoveTypes::$RIGHT);
             }
 
             if ($closest->y < $this->me->head->y) {
-                array_push($possibleMoves, MoveTypes::$DOWN);
+                array_push($moves, MoveTypes::$DOWN);
             }
 
             if ($closest->y > $this->me->head->y) {
-                array_push($possibleMoves, MoveTypes::$UP);
+                array_push($moves, MoveTypes::$UP);
             }
 
-            error_log("[NearbyFood] Nothing close by, heading further afield " . $possibleMoves[0]);
-            return $possibleMoves[0];
+            $moves = array_intersect($moves, $possibleMoves);
+
+            error_log("[NearbyFood] Nothing close by, heading further afield " . $moves[0]);
+            return $moves[0];
         }
 
         error_log("[NearbyFood] No food!");
