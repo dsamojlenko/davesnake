@@ -65,7 +65,7 @@ class Api
      *
      * @param array $responseData Array of data to be cast to an object and encoded to JSON
      */
-    public function outputJsonResponse(array $responseData) : void
+    public static function outputJsonResponse(array $responseData) : void
     {
         $body = (object) $responseData;
         header('Content-Type: application/json');
