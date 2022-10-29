@@ -21,10 +21,10 @@ class Router
         switch($this->request->REQUEST_URI) {
             case "/":
                 $apiversion = "1";
-                $author     = "";           // TODO: Your Battlesnake Username
-                $color      = "#888888";    // TODO: Personalize
-                $head       = "default";    // TODO: Personalize
-                $tail       = "default";    // TODO: Personalize
+                $author     = "dsamojlenko";
+                $color      = "#900C3F";
+                $head       = "smile";
+                $tail       = "bolt";
 
                 Api::indexResponse($apiversion,$author,$color,$head, $tail);
                 break;
