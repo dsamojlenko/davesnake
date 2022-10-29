@@ -24,7 +24,6 @@ class Engine
         $this->data = $data;
         $this->board = new Board($data->board);
         $this->me = new BattleSnake($data->you);
-        $this->me->tail = end($this->me->body);
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
 
         $this->randomMove = new RandomMove();
