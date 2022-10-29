@@ -29,13 +29,13 @@ class NearbyFood
             $foodTargets = $this->getFoodTargets();
 
             $closest = new Coordinates($foodTargets[0]);
-            error_log("[NearbyFood] Closest " . print_r($closest, true));
+            // error_log("[NearbyFood] Closest " . print_r($closest, true));
 
             if ($foodTargets[0]->distance < $radius || $radius === 0) {
                 $targetDirections = array_values(array_intersect($this->getDirectionsToTarget($closest), $possibleMoves));
 
                 if (count($targetDirections)) {
-                  error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
+                  // error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
                   return $targetDirections[0];
                 }
             }

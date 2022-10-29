@@ -32,6 +32,8 @@ class AvoidWalls extends AvoidanceBaseClass implements AvoidanceInterface
             }
         }
 
+        error_log("[AvoidWalls] Remaining moves: " . print_r($possibleMoves, true));
+
         return $possibleMoves;
     }
 }

@@ -15,34 +15,28 @@ class AvoidSnakes extends AvoidanceBaseClass implements AvoidanceInterface
             foreach($snake->body as $part) {
                 if($head->y + 1 == $part->y && $head->x == $part->x) {
                     if(!($head->y + 1 == $tail->y && $head->x == $tail->x)) { // Don't worry about the tail
-                        $possibleMoves = array_filter($possibleMoves, function($move) {
-                            return $move !== "up"; // can't go up
-                        });
+                        $possibleMoves = $this->eliminateMove($possibleMoves, "up");
                     }
                 }
                 if($head->y - 1 == $part->y && $head->x == $part->x) {
                     if(!($head->y - 1 == $tail->y && $head->x == $tail->x)) {
-                        $possibleMoves = array_filter($possibleMoves, function($move) {
-                            return $move !== "down"; // can't go down
-                        });
+                        $possibleMoves = $this->eliminateMove($possibleMoves, "down");
                     }
                 }
                 if($head->x + 1 == $part->x && $head->y == $part->y) {
                     if(!($head->x + 1 == $tail->x && $head->y == $tail->y)) {
-                        $possibleMoves = array_filter($possibleMoves, function($move) {
-                            return $move !== "right"; // can't go right
-                        });
+                        $possibleMoves = $this->eliminateMove($possibleMoves, "right");
                     }
                 }
                 if($head->x - 1 == $part->x && $head->y == $part->y) {
                     if(!($head->x - 1 == $tail->x && $head->y == $tail->y)) {
-                        $possibleMoves = array_filter($possibleMoves, function($move) {
-                            return $move !== "left"; // can't go left
-                        });
+                        $possibleMoves = $this->eliminateMove($possibleMoves, "left");
                     }
                 }
             }
         }
+        error_log("[AvoidSnakes] Remaining moves: " . print_r($possibleMoves, true));
+
         return $possibleMoves;
     }
 }

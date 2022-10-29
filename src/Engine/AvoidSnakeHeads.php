@@ -20,7 +20,7 @@ class AvoidSnakeHeads extends AvoidanceBaseClass implements AvoidanceInterface
                 // only worried if I can't beat the snake
                 if ($snake->length >= $this->me->length) {
                     // only the ones close by
-                    if ($this->getDistanceToTarget($snake->head) <= 2) {
+                    if ($this->getDistanceToTarget($snake->head) <= 1) {
                         $head = new Coordinates($snake->body[0]);
                         foreach ($possibleMoves as $move) {
                             $target = $this->getMoveTargetCoordinates($move, 1);
@@ -34,6 +34,8 @@ class AvoidSnakeHeads extends AvoidanceBaseClass implements AvoidanceInterface
                 }
             }
         }
+
+        error_log("[AvoidSnakeHeadss] Remaining moves: " . print_r($possibleMoves, true));
 
         return $possibleMoves;
     }
