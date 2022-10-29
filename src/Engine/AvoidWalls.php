@@ -4,29 +4,11 @@ declare(strict_types=1);
 
 namespace DaveSnake\Engine;
 
-use DaveSnake\Models\BattleSnake;
-use DaveSnake\Models\Board;
 use DaveSnake\Models\Move;
 
-class AvoidWalls
+class AvoidWalls extends AvoidanceBaseClass implements AvoidanceInterface
 {
-    private Board $board;
-    private BattleSnake $me;
-
-    public function __construct($data)
-    {
-        $this->board = new Board($data->board);
-        $this->me = new BattleSnake($data->you);
-    }
-
-    private function eliminateMove($possibleMoves, $eliminated): array
-    {
-        return array_filter($possibleMoves, function ($move) use ($eliminated) {
-            return $move !== $eliminated;
-        });
-    }
-
-    public function filterMoves($possibleMoves)
+    public function filterMoves($possibleMoves): array
     {
         // Check for walls
         foreach ($possibleMoves as $move) {

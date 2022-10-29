@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace DaveSnake\Engine;
 
-use DaveSnake\Models\BattleSnake;
-use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
 
-class AvoidSnakes
+class AvoidSnakes extends AvoidanceBaseClass implements AvoidanceInterface
 {
-    private Board $board;
-    private BattleSnake $me;
-    private Coordinates $tail;
+    protected Coordinates $tail;
 
     public function __construct($data)
     {
-        $this->board = new Board($data->board);
-        $this->me = new BattleSnake($data->you);
+        parent::__construct($data);
         $this->tail = new Coordinates(end($data->you->body));
     }
 
-    public function filterMoves($possibleMoves)
+    public function filterMoves($possibleMoves): array
     {
         foreach ($this->board->snakes as $snake) {
             foreach($snake->body as $part) {
