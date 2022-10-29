@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace DaveSnake\Engine;
 
-use DaveSnake\Models\BattleSnake;
-use DaveSnake\Models\Board;
-
 class Engine
 {
-    private $data;
-    private BattleSnake $me;
-    private Board $board;
     private array $possibleMoves;
 
     private AvoidWalls $avoidWalls;
@@ -21,9 +15,6 @@ class Engine
 
     public function __construct($data)
     {
-        $this->data = $data;
-        $this->board = new Board($data->board);
-        $this->me = new BattleSnake($data->you);
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
 
         $this->randomMove = new RandomMove();
@@ -40,11 +31,6 @@ class Engine
 
         // If there's food within one or two spaces, grab it
         $move = $this->nearbyFood->findFood($this->possibleMoves, 4);
-
-        // Ok let's find the closest food and move towards it
-        if (!$move) {
-
-        }
 
         // finally, random
         if (!$move) {
