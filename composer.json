@@ -1,7 +1,6 @@
 {
   "require": {
-  },
-  "require-dev": {
+    "heroku/heroku-buildpack-php": "^226.0"
   },
   "autoload": {
     "psr-4": {
