@@ -31,12 +31,14 @@ class AvoidHazards
 
     public function getMoves($possibleMoves)
     {
-        $moveTargets = [];
+        error_log("[AvoidHazards] Check for hazards");
         $hazards = [];
 
         foreach($this->board->hazards as $hazard) {
             array_push($hazards, new Coordinates($hazard));
         }
+
+        error_log("[AvoidHazards] Hazards: " . print_r($hazards, true));
 
         foreach($possibleMoves as $move) {
             $target = $this->getMoveTarget($move, 1);
@@ -46,6 +48,8 @@ class AvoidHazards
                 }
             }
         }
+
+        error_log("[AvoidHazards] Remaining moves: " . print_r($possibleMoves, true));
 
         return $possibleMoves;
     }
