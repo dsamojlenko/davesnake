@@ -4,7 +4,7 @@
 namespace DaveSnake\Engine;
 
 
-use DaveSnake\Engine\Concerns\IdentifiesLocations;
+use DaveSnake\Engine\Concerns\InteractsWithBoard;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 
@@ -13,7 +13,7 @@ class AvoidanceBaseClass
     protected Board $board;
     protected BattleSnake $me;
 
-    use IdentifiesLocations;
+    use InteractsWithBoard;
 
     public function __construct($data)
     {

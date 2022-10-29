@@ -7,9 +7,16 @@ namespace DaveSnake\Engine\Concerns;
 use DaveSnake\Models\Coordinates;
 use DaveSnake\Models\Move;
 
-trait IdentifiesLocations
+trait InteractsWithBoard
 {
-    public function getMoveTarget(string $move, int $distance): Coordinates
+    /**
+     * Get coordinates of destination relative to self
+     *
+     * @param string $move
+     * @param int $distance
+     * @return Coordinates
+     */
+    public function getMoveTargetCoordinates(string $move, int $distance): Coordinates
     {
         $x = 0;
         $y = 0;
@@ -37,6 +44,8 @@ trait IdentifiesLocations
     }
 
     /**
+     * Returns up to two directions to target.
+     * ie, ["left", "up"] ["right", "down"] ["down"]
      * @param Coordinates $closest
      * @return array
      */
@@ -63,6 +72,11 @@ trait IdentifiesLocations
         return $targetDirections;
     }
 
+    /**
+     * Calculates distance to target
+     * @param Coordinates $target
+     * @return int
+     */
     public function getDistanceToTarget(Coordinates $target): int
     {
         $distanceX = $this->me->head->x - $target->x;
@@ -78,6 +92,11 @@ trait IdentifiesLocations
         return $distanceX + $distanceY;
     }
 
+    /**
+     * Gets adjacent cell coordinates relative to target
+     * @param Coordinates $target
+     * @return array
+     */
     public function getAdjacentCells(Coordinates $target): array
     {
         $targetId = $target->getLocationId($this->board);

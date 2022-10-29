@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DaveSnake\Engine;
 
-use DaveSnake\Engine\Concerns\IdentifiesLocations;
+use DaveSnake\Engine\Concerns\InteractsWithBoard;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
@@ -14,7 +14,7 @@ class NearbyFood
     private Board $board;
     private BattleSnake $me;
 
-    use IdentifiesLocations;
+    use InteractsWithBoard;
 
     public function __construct($data)
     {

@@ -11,7 +11,7 @@ class AvoidHazards extends AvoidanceBaseClass implements AvoidanceInterface
         error_log("[AvoidHazards] Check for hazards: " . print_r($this->board->hazards, true));
         $remainingMoves = $possibleMoves;
         foreach($possibleMoves as $move) {
-            $target = $this->getMoveTarget($move, 1);
+            $target = $this->getMoveTargetCoordinates($move, 1);
             error_log("[AvoidHazards] target: " . print_r($target, true));
             foreach($this->board->hazards as $hazard) {
                 if($hazard->x === $target->x && $hazard->y === $target->y) {

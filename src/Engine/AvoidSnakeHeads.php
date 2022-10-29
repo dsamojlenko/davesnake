@@ -23,7 +23,7 @@ class AvoidSnakeHeads extends AvoidanceBaseClass implements AvoidanceInterface
                     if ($this->getDistanceToTarget($snake->head) <= 2) {
                         $head = new Coordinates($snake->body[0]);
                         foreach ($possibleMoves as $move) {
-                            $target = $this->getMoveTarget($move, 1);
+                            $target = $this->getMoveTargetCoordinates($move, 1);
                             $adjacents = $this->getAdjacentCells($target);
                             if (in_array($head->getLocationId($this->board), $adjacents)) {
                                 error_log("[AvoidSnakeHeads] Snake nearby " . print_r($head, true));
