@@ -56,7 +56,7 @@ class NearbyFood
             }
 
             usort($foodDistances, function ($a, $b) {
-                return $a->distance > $b->distance;
+                return $a->distance <=> $b->distance;
             });
 
             // error_log("[NearbyFood] " . print_r($foodDistances, true));
@@ -83,10 +83,12 @@ class NearbyFood
                 array_push($targetDirections, MoveTypes::$UP);
             }
 
-            $targetDirections = array_intersect($targetDirections, $possibleMoves);
-
-            error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
-            return $targetDirections[0];
+            $targetDirections = array_values(array_intersect($targetDirections, $possibleMoves));
+            
+            if (count($targetDirections)) {
+              error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
+              return $targetDirections[0];
+            }
         }
 
         error_log("[NearbyFood] No food!");
