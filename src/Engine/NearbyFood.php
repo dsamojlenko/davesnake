@@ -19,7 +19,29 @@ class NearbyFood
         $this->me = new BattleSnake($data->you);
     }
 
-    public function findFood(string $move, int $distance): bool
+    public function findFood(array $possibleMoves)
+    {
+        // Look one space away
+        foreach ($possibleMoves as $move) {
+            if ($this->findFood($move, 1)) {
+                error_log("[NearbyFood] Found food one space away");
+                return $move;
+            }
+        }
+
+        // Look a little further away
+        foreach ($possibleMoves as $move) {
+            if ($this->findFood($move, 2)) {
+                error_log("[NearbyFood] Found food two spaces away");
+                return $move;
+            }
+        }
+
+        error_log("[NearbyFood] Nothing close by");
+        return false;
+    }
+
+    public function getTarget(string $move, int $distance): bool
     {
         $x = 0;
         $y = 0;

@@ -38,27 +38,7 @@ class Engine
         $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves);
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
 
-        $move = false;
-
-        // Look one space away
-        foreach ($this->possibleMoves as $checkMove) {
-            if ($this->nearbyFood->findFood($checkMove, 1)) {
-                $move = $checkMove;
-                error_log("found food one space away");
-                break;
-            }
-        }
-
-        // Look a little further away
-        if (!$move) {
-            foreach ($this->possibleMoves as $checkMove) {
-                if ($this->nearbyFood->findFood($checkMove, 2)) {
-                    $move = $checkMove;
-                    error_log("found food two spaces away");
-                    break;
-                }
-            }
-        }
+        $move = $this->nearbyFood->findFood($this->possibleMoves);
 
         if (!$move) {
             $move = $this->randomMove->getMove($this->possibleMoves);
