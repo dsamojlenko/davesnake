@@ -42,8 +42,8 @@ class Engine
         // Head towards food within the radius
         $move = $this->nearbyFood->findFood($this->possibleMoves, (int)getenv("DEFAULT_SEARCH_RADIUS"));
 
-        // finally, random
-        if (!$move) {
+        // finally, random if there's anything left
+        if (!$move && count($this->possibleMoves)) {
             $move = $this->randomMove->getMove($this->possibleMoves);
         }
       
