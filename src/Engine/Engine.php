@@ -13,8 +13,10 @@ class Engine
     private BattleSnake $me;
     private Board $board;
     private array $possibleMoves;
-    private $avoidWalls;
-    private $avoidSnakes;
+
+    private AvoidWalls $avoidWalls;
+    private AvoidSnakes $avoidSnakes;
+    private RandomMove $randomMove;
 
     public function __construct($data)
     {
@@ -24,6 +26,7 @@ class Engine
         $this->me->tail = end($this->me->body);
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
 
+        $this->randomMove = new RandomMove();
         $this->avoidWalls = new AvoidWalls();
         $this->avoidSnakes = new AvoidSnakes();
     }
@@ -72,7 +75,7 @@ class Engine
         $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves, $this->board, $this->me);
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves, $this->board, $this->me);
 
-        $move =  $this->possibleMoves[array_rand($this->possibleMoves)];
+        $move = $this->randomMove->getMove($this->possibleMoves);
       
         // if (!$move = $this->lookForFood(1)) {
         //   if (!$move = $this->lookForFood(2)) {
