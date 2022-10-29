@@ -12,6 +12,7 @@
     "pestphp/pest": "^1.22"
   },
   "scripts": {
-    "test": "./vendor/bin/pest"
+    "test": "./vendor/bin/pest",
+    "start": "php -S localhost:8000"
   }
 }
