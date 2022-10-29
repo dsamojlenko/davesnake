@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace DaveSnake\Engine;
 
+use DaveSnake\Engine\Concerns\IdentifiesLocations;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
-use DaveSnake\Models\Move;
 
 class NearbyFood
 {
     private Board $board;
     private BattleSnake $me;
+
+    use IdentifiesLocations;
 
     public function __construct($data)
     {
@@ -65,69 +67,5 @@ class NearbyFood
 
         error_log("[NearbyFood] No food!");
         return false;
-    }
-
-    public function getTarget(string $move, int $distance): Coordinates
-    {
-        $x = 0;
-        $y = 0;
-
-        switch($move) {
-            case Move::$UP:
-                $x = $this->me->head->x;
-                $y = $this->me->head->y + $distance;
-                break;
-            case Move::$DOWN:
-                $x = $this->me->head->x;
-                $y = $this->me->head->y - $distance;
-                break;
-            case Move::$LEFT:
-                $x = $this->me->head->x - $distance;
-                $y = $this->me->head->y;
-                break;
-            case Move::$RIGHT:
-                $x = $this->me->head->x + $distance;
-                $y = $this->me->head->y;
-                break;
-        }
-
-        return new Coordinates((object) [ "x" => $x, "y" => $y]);
-    }
-
-//    public function checkForFood(Coordinates $target): bool
-//    {
-//        foreach($this->board->food as $food) {
-//            if ($food->x == $target->x && $food->y == $target->y) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-    /**
-     * @param Coordinates $closest
-     * @param array $possibleMoves
-     * @return array
-     */
-    public function getTargetDirections(Coordinates $closest): array
-    {
-        $targetDirections = [];
-
-        if ($closest->x < $this->me->head->x) {
-            array_push($targetDirections, Move::$LEFT);
-        }
-
-        if ($closest->x > $this->me->head->x) {
-            array_push($targetDirections, Move::$RIGHT);
-        }
-
-        if ($closest->y < $this->me->head->y) {
-            array_push($targetDirections, Move::$DOWN);
-        }
-
-        if ($closest->y > $this->me->head->y) {
-            array_push($targetDirections, Move::$UP);
-        }
-
-        return $targetDirections;
     }
 }
