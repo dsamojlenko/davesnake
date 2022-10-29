@@ -19,7 +19,7 @@ class FindFood
         $this->me = new BattleSnake($data->you);
     }
 
-    public function findFood(string $move, integer $distance): bool
+    public function findFood(string $move, int $distance): bool
     {
         $x = 0;
         $y = 0;
