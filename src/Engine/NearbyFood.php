@@ -52,7 +52,14 @@ class NearbyFood
                 "distance" => $distancex + $distancey,
             ]);
         }
+
+        usort($foodDistances, function($a, $b) {
+            return $a->distance > $b->distance;
+        });
+
         error_log("[NearbyFood] " . print_r($foodDistances, true));
+
+
 
         error_log("[NearbyFood] Nothing close by");
         return false;
