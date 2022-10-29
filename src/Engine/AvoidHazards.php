@@ -38,6 +38,7 @@ class AvoidHazards
             error_log("[AvoidHazards] target: " . print_r($target, true));
             foreach($this->board->hazards as $hazard) {
                 if($hazard->x === $target->x && $hazard->y === $target->y) {
+                    error_log("[AvoidHazards] Eliminating move: " . $move);
                     $this->eliminateMove($possibleMoves, $move);
                 }
             }
