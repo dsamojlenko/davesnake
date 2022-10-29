@@ -32,20 +32,20 @@ class AvoidHazards
     public function getMoves($possibleMoves)
     {
         error_log("[AvoidHazards] Check for hazards: " . print_r($this->board->hazards, true));
-
+        $remainingMoves = $possibleMoves;
         foreach($possibleMoves as $move) {
             $target = $this->getMoveTarget($move, 1);
             error_log("[AvoidHazards] target: " . print_r($target, true));
             foreach($this->board->hazards as $hazard) {
                 if($hazard->x === $target->x && $hazard->y === $target->y) {
                     error_log("[AvoidHazards] Eliminating move: " . $move);
-                    $this->eliminateMove($possibleMoves, $move);
+                    $remainingMoves = $this->eliminateMove($remainingMoves, $move);
                 }
             }
         }
 
-        error_log("[AvoidHazards] Remaining moves: " . print_r($possibleMoves, true));
+        error_log("[AvoidHazards] Remaining moves: " . print_r($remainingMoves, true));
 
-        return $possibleMoves;
+        return $remainingMoves;
     }
 }
