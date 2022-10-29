@@ -12,6 +12,7 @@ class Engine
     private AvoidSnakes $avoidSnakes;
     private RandomMove $randomMove;
     private NearbyFood $nearbyFood;
+    private AvoidHazards $avoidHazards;
 
     public function __construct($data)
     {
@@ -21,12 +22,14 @@ class Engine
         $this->avoidWalls = new AvoidWalls($data);
         $this->avoidSnakes = new AvoidSnakes($data);
         $this->nearbyFood = new NearbyFood($data);
+        $this->avoidHazards = new AvoidHazards($data);
     }
 
     public function getMove()
     {
         // Eliminate walls and snakes
         $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves);
+        $this->possibleMoves = $this->avoidHazards->getMoves($this->possibleMoves);
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
 
         // Eliminate Hazards
