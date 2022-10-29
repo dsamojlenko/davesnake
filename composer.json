@@ -7,5 +7,11 @@
     "psr-4": {
       "DaveSnake\\": "src/"
     }
+  },
+  "require-dev": {
+    "pestphp/pest": "^1.22"
+  },
+  "scripts": {
+    "test": "./vendor/bin/pest"
   }
 }
