@@ -77,13 +77,26 @@ class Engine
         $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves, $this->board, $this->me);
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves, $this->board, $this->me);
 
-        $move = $this->randomMove->getMove($this->possibleMoves);
+        $move = false;
 
         foreach ($this->possibleMoves as $checkMove) {
             if ($this->findFood->findFood($checkMove, 1)) {
                 $move = $checkMove;
                 break;
             }
+        }
+
+        if (!$move) {
+            foreach ($this->possibleMoves as $checkMove) {
+                if ($this->findFood->findFood($checkMove, 2)) {
+                    $move = $checkMove;
+                    break;
+                }
+            }
+        }
+
+        if (!$move) {
+            $move = $this->randomMove->getMove($this->possibleMoves);
         }
       
         error_log("Moving: " . ($move ? $move : "Oh no, nowhere to go!"));
