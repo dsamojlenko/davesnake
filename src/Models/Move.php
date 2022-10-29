@@ -6,5 +6,8 @@ namespace DaveSnake\Models;
 
 class Move
 {
-    public $move;
+    public static $LEFT = "left";
+    public static $RIGHT = "right";
+    public static $DOWN = "down";
+    public static $UP = "up";
 }

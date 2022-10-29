@@ -7,7 +7,7 @@ namespace DaveSnake\Engine;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
-use DaveSnake\Models\MoveTypes;
+use DaveSnake\Models\Move;
 
 class NearbyFood
 {
@@ -68,19 +68,19 @@ class NearbyFood
             $targetDirections = [];
 
             if ($closest->x < $this->me->head->x) {
-                array_push($targetDirections, MoveTypes::$LEFT);
+                array_push($targetDirections, Move::$LEFT);
             }
 
             if ($closest->x > $this->me->head->x) {
-                array_push($targetDirections, MoveTypes::$RIGHT);
+                array_push($targetDirections, Move::$RIGHT);
             }
 
             if ($closest->y < $this->me->head->y) {
-                array_push($targetDirections, MoveTypes::$DOWN);
+                array_push($targetDirections, Move::$DOWN);
             }
 
             if ($closest->y > $this->me->head->y) {
-                array_push($targetDirections, MoveTypes::$UP);
+                array_push($targetDirections, Move::$UP);
             }
 
             $targetDirections = array_values(array_intersect($targetDirections, $possibleMoves));
@@ -101,19 +101,19 @@ class NearbyFood
         $y = 0;
 
         switch($move) {
-            case MoveTypes::$UP:
+            case Move::$UP:
                 $x = $this->me->head->x;
                 $y = $this->me->head->y + $distance;
                 break;
-            case MoveTypes::$DOWN:
+            case Move::$DOWN:
                 $x = $this->me->head->x;
                 $y = $this->me->head->y - $distance;
                 break;
-            case MoveTypes::$LEFT:
+            case Move::$LEFT:
                 $x = $this->me->head->x - $distance;
                 $y = $this->me->head->y;
                 break;
-            case MoveTypes::$RIGHT:
+            case Move::$RIGHT:
                 $x = $this->me->head->x + $distance;
                 $y = $this->me->head->y;
                 break;

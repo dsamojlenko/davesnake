@@ -6,7 +6,7 @@ namespace DaveSnake\Engine;
 
 use DaveSnake\Models\Board;
 use DaveSnake\Models\BattleSnake;
-use DaveSnake\Models\MoveTypes;
+use DaveSnake\Models\Move;
 
 class AvoidWalls
 {
@@ -32,19 +32,19 @@ class AvoidWalls
       foreach($possibleMoves as $move) {
           // Check up
           if ($this->me->head->y + 1 > $this->board->height-1) {
-              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$UP);
+              $possibleMoves = $this->eliminateMove($possibleMoves, Move::$UP);
           }
           // Check down
           if ($this->me->head->y -1 < 0) {
-              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$DOWN);
+              $possibleMoves = $this->eliminateMove($possibleMoves, Move::$DOWN);
           }
           // Check left
           if ($this->me->head->x -1 < 0) {
-              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$LEFT);
+              $possibleMoves = $this->eliminateMove($possibleMoves, Move::$LEFT);
           }
           // Check right
           if ($this->me->head->x + 1 > $this->board->width-1) {
-              $possibleMoves = $this->eliminateMove($possibleMoves, MoveTypes::$RIGHT);
+              $possibleMoves = $this->eliminateMove($possibleMoves, Move::$RIGHT);
           }
       }
       
