@@ -31,7 +31,7 @@ class NearbyFood
             $closest = new Coordinates($foodTargets[0]);
             error_log("[NearbyFood] Closest " . print_r($closest, true));
 
-            if ($closest->distance < $radius || $radius === 0) {
+            if ($foodTargets[0]->distance < $radius || $radius === 0) {
                 $targetDirections = array_values(array_intersect($this->getDirectionsToTarget($closest), $possibleMoves));
 
                 if (count($targetDirections)) {
