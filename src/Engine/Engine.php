@@ -13,6 +13,7 @@ class Engine
     private RandomMove $randomMove;
     private NearbyFood $nearbyFood;
     private AvoidHazards $avoidHazards;
+    private AvoidSnakeHeads $avoidSnakeHeads;
 
     public function __construct($data)
     {
@@ -23,6 +24,7 @@ class Engine
         $this->avoidSnakes = new AvoidSnakes($data);
         $this->nearbyFood = new NearbyFood($data);
         $this->avoidHazards = new AvoidHazards($data);
+        $this->avoidSnakeHeads = new AvoidSnakeHeads($data);
     }
 
     public function getMove()
@@ -31,9 +33,7 @@ class Engine
         $this->possibleMoves = $this->avoidWalls->filterMoves($this->possibleMoves);
         $this->possibleMoves = $this->avoidHazards->filterMoves($this->possibleMoves);
         $this->possibleMoves = $this->avoidSnakes->filterMoves($this->possibleMoves);
-
-        // Watch for snake heads that I can't beat
-
+        $this->possibleMoves = $this->avoidSnakeHeads->filterMoves($this->possibleMoves);
 
         // Look ahead a bit and check for traps?
 
