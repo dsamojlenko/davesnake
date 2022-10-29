@@ -4,20 +4,27 @@ declare(strict_types=1);
 
 namespace DaveSnake\Engine;
 
+use DaveSnake\Models\BattleSnake;
+use DaveSnake\Models\Board;
+
 class Engine
 {
-    private array $possibleMoves;
+    protected array $possibleMoves;
+    protected BattleSnake $me;
+    protected Board $board;
 
-    private AvoidWalls $avoidWalls;
-    private AvoidSnakes $avoidSnakes;
-    private RandomMove $randomMove;
-    private NearbyFood $nearbyFood;
-    private AvoidHazards $avoidHazards;
-    private AvoidSnakeHeads $avoidSnakeHeads;
+    protected AvoidWalls $avoidWalls;
+    protected AvoidSnakes $avoidSnakes;
+    protected RandomMove $randomMove;
+    protected NearbyFood $nearbyFood;
+    protected AvoidHazards $avoidHazards;
+    protected AvoidSnakeHeads $avoidSnakeHeads;
 
     public function __construct($data)
     {
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
+        $this->me = new BattleSnake($data->you);
+        $this->board = new Board($data->board);
 
         $this->randomMove = new RandomMove();
         $this->avoidWalls = new AvoidWalls($data);
@@ -38,9 +45,17 @@ class Engine
         // Look ahead a bit and check for traps?
 
         // When all else fails, follow tail
+        $move = false;
 
-        // Head towards food within the radius
-        $move = $this->nearbyFood->findFood($this->possibleMoves, (int)getenv("DEFAULT_SEARCH_RADIUS"));
+        // When health is good, look for food only in immediate vicinity
+        if ($this->me->health > 75) {
+            $move = $this->nearbyFood->findFood($this->possibleMoves, (int) ($this->board->width / 2));
+        }
+
+        // Getting low, better search all over
+        if ($this->me->health < 50) {
+            $move = $this->nearbyFood->findFood($this->possibleMoves, 0);
+        }
 
         // finally, random if there's anything left
         if (!$move && count($this->possibleMoves)) {
