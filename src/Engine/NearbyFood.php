@@ -23,7 +23,7 @@ class NearbyFood
     {
         // Look one space away
         foreach ($possibleMoves as $move) {
-            if ($this->findFood($move, 1)) {
+            if ($this->checkForFood($this->getTarget($move, 1))) {
                 error_log("[NearbyFood] Found food one space away");
                 return $move;
             }
@@ -31,7 +31,7 @@ class NearbyFood
 
         // Look a little further away
         foreach ($possibleMoves as $move) {
-            if ($this->findFood($move, 2)) {
+            if ($this->checkForFood($this->getTarget($move, 2))) {
                 error_log("[NearbyFood] Found food two spaces away");
                 return $move;
             }
@@ -41,7 +41,7 @@ class NearbyFood
         return false;
     }
 
-    public function getTarget(string $move, int $distance): bool
+    public function getTarget(string $move, int $distance): Coordinates
     {
         $x = 0;
         $y = 0;
@@ -67,7 +67,7 @@ class NearbyFood
 
         $target =  new Coordinates((object) [ "x" => $x, "y" => $y]);
 
-        return $this->checkForFood($target);
+        return $target;
     }
 
     public function checkForFood(Coordinates $target): bool
