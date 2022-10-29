@@ -35,11 +35,19 @@ class Engine
 
     public function getMove()
     {
+        // Eliminate walls and snakes
         $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves);
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
 
-        $move = $this->nearbyFood->findFood($this->possibleMoves);
+        // If there's food within one or two spaces, grab it
+        $move = $this->nearbyFood->findFood($this->possibleMoves, 4);
 
+        // Ok let's find the closest food and move towards it
+        if (!$move) {
+
+        }
+
+        // finally, random
         if (!$move) {
             $move = $this->randomMove->getMove($this->possibleMoves);
         }

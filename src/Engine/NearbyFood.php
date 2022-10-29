@@ -20,21 +20,15 @@ class NearbyFood
         $this->me = new BattleSnake($data->you);
     }
 
-    public function findFood(array $possibleMoves)
+    public function findFood(array $possibleMoves, int $range)
     {
         // Look one space away
-        foreach ($possibleMoves as $move) {
-            if ($this->checkForFood($this->getTarget($move, 1))) {
-                error_log("[NearbyFood] Found food one space away");
-                return $move;
-            }
-        }
-
-        // Look a little further away
-        foreach ($possibleMoves as $move) {
-            if ($this->checkForFood($this->getTarget($move, 2))) {
-                error_log("[NearbyFood] Found food two spaces away");
-                return $move;
+        for ($distance = 0; $distance <= $range; $distance++) {
+            foreach ($possibleMoves as $move) {
+                if ($this->checkForFood($this->getTarget($move, $distance))) {
+                    error_log("[NearbyFood] Found food " . $distance . " spaces away");
+                    return $move;
+                }
             }
         }
 

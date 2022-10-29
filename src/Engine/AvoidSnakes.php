@@ -20,7 +20,7 @@ class AvoidSnakes
 
     public function getMoves($possibleMoves)
     {
-        // Avoid snakes
+        // @TODO: don't worry about snake bums
         foreach ($this->board->snakes as $snake) {
             foreach($snake->body as $part) {
                 if($this->me->head->y + 1 == $part->y && $this->me->head->x == $part->x) {
