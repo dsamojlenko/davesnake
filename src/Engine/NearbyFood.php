@@ -23,14 +23,14 @@ class NearbyFood
     public function findFood(array $possibleMoves, int $range)
     {
         // Look around the immediate area
-        for ($distance = 0; $distance <= $range; $distance++) {
-            foreach ($possibleMoves as $move) {
-                if ($this->checkForFood($this->getTarget($move, $distance))) {
-                    error_log("[NearbyFood] Found food " . $distance . " spaces away");
-                    return $move;
-                }
-            }
-        }
+//        for ($distance = 0; $distance <= $range; $distance++) {
+//            foreach ($possibleMoves as $move) {
+//                if ($this->checkForFood($this->getTarget($move, $distance))) {
+//                    error_log("[NearbyFood] Found food " . $distance . " spaces away");
+//                    return $move;
+//                }
+//            }
+//        }
 
         // nothing in range, where the hell is the food?
         error_log("[NearbyFood] Nothing nearby, looking around");
@@ -122,13 +122,13 @@ class NearbyFood
         return new Coordinates((object) [ "x" => $x, "y" => $y]);
     }
 
-    public function checkForFood(Coordinates $target): bool
-    {
-        foreach($this->board->food as $food) {
-            if ($food->x == $target->x && $food->y == $target->y) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public function checkForFood(Coordinates $target): bool
+//    {
+//        foreach($this->board->food as $food) {
+//            if ($food->x == $target->x && $food->y == $target->y) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }
