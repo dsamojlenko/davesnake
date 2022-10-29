@@ -26,7 +26,7 @@ class AvoidWalls
         });
     }
 
-    public function getMoves($possibleMoves)
+    public function filterMoves($possibleMoves)
     {
         // Check for walls
         foreach ($possibleMoves as $move) {

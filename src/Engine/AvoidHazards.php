@@ -7,7 +7,6 @@ namespace DaveSnake\Engine;
 use DaveSnake\Engine\Concerns\IdentifiesLocations;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
-use DaveSnake\Models\Coordinates;
 
 class AvoidHazards
 {
@@ -29,7 +28,7 @@ class AvoidHazards
         });
     }
 
-    public function getMoves($possibleMoves)
+    public function filterMoves($possibleMoves)
     {
         error_log("[AvoidHazards] Check for hazards: " . print_r($this->board->hazards, true));
         $remainingMoves = $possibleMoves;

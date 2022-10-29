@@ -21,7 +21,7 @@ class AvoidSnakes
         $this->tail = new Coordinates(end($data->you->body));
     }
 
-    public function getMoves($possibleMoves)
+    public function filterMoves($possibleMoves)
     {
         foreach ($this->board->snakes as $snake) {
             foreach($snake->body as $part) {

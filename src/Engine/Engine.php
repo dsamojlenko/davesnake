@@ -27,15 +27,17 @@ class Engine
 
     public function getMove()
     {
-        // Eliminate walls and snakes
-        $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves);
-        $this->possibleMoves = $this->avoidHazards->getMoves($this->possibleMoves);
-        $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
+        // Avoid walls, snakes, and hazards
+        $this->possibleMoves = $this->avoidWalls->filterMoves($this->possibleMoves);
+        $this->possibleMoves = $this->avoidHazards->filterMoves($this->possibleMoves);
+        $this->possibleMoves = $this->avoidSnakes->filterMoves($this->possibleMoves);
 
-        // Eliminate Hazards
-        // Watch for snake heads
+        // Watch for snake heads that I can't beat
 
-        // Follow tail
+
+        // Look ahead a bit and check for traps?
+
+        // When all else fails, follow tail
 
         // Head towards food within the radius
         $move = $this->nearbyFood->findFood($this->possibleMoves, (int)getenv("DEFAULT_SEARCH_RADIUS"));
