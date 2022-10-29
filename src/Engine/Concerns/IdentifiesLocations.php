@@ -9,9 +9,7 @@ use DaveSnake\Models\Move;
 
 trait IdentifiesLocations
 {
-    // private BattleSnake $me;
-
-    public function getTarget(string $move, int $distance): Coordinates
+    public function getMoveTarget(string $move, int $distance): Coordinates
     {
         $x = 0;
         $y = 0;
@@ -42,7 +40,7 @@ trait IdentifiesLocations
      * @param Coordinates $closest
      * @return array
      */
-    public function getTargetDirections(Coordinates $closest): array
+    public function getDirectionsToTarget(Coordinates $closest): array
     {
         $targetDirections = [];
 

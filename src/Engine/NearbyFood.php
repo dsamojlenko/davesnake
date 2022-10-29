@@ -26,35 +26,13 @@ class NearbyFood
     {
         error_log("[NearbyFood] Looking for food");
         if (count($this->board->food)) {
-            $foodDistances = [];
+            $foodTargets = $this->getFoodTargets();
 
-            foreach ($this->board->food as $food) {
-                $distancex = $this->me->head->x - $food->x;
-                $distancey = $this->me->head->y - $food->y;
-
-                if ($distancex < 0) {
-                    $distancex *= -1;
-                }
-                if ($distancey < 0) {
-                    $distancey *= -1;
-                }
-
-                array_push($foodDistances, (object)[
-                    "x" => $food->x,
-                    "y" => $food->y,
-                    "distance" => $distancex + $distancey,
-                ]);
-            }
-
-            usort($foodDistances, function ($a, $b) {
-                return $a->distance <=> $b->distance;
-            });
-
-            $closest = new Coordinates($foodDistances[0]);
+            $closest = new Coordinates($foodTargets[0]);
             error_log("[NearbyFood] Closest " . print_r($closest, true));
 
-            if ($foodDistances[0]->distance < $radius || $radius === 0) {
-                $targetDirections = array_values(array_intersect($this->getTargetDirections($closest), $possibleMoves));
+            if ($closest->distance < $radius || $radius === 0) {
+                $targetDirections = array_values(array_intersect($this->getDirectionsToTarget($closest), $possibleMoves));
 
                 if (count($targetDirections)) {
                   error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
@@ -67,5 +45,36 @@ class NearbyFood
 
         error_log("[NearbyFood] No food!");
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFoodTargets(): array
+    {
+        $foodTargets = [];
+
+        foreach ($this->board->food as $food) {
+            $distancex = $this->me->head->x - $food->x;
+            $distancey = $this->me->head->y - $food->y;
+
+            if ($distancex < 0) {
+                $distancex *= -1;
+            }
+            if ($distancey < 0) {
+                $distancey *= -1;
+            }
+
+            array_push($foodTargets, (object)[
+                "x" => $food->x,
+                "y" => $food->y,
+                "distance" => $distancex + $distancey,
+            ]);
+        }
+
+        usort($foodTargets, function ($a, $b) {
+            return $a->distance <=> $b->distance;
+        });
+        return $foodTargets;
     }
 }
