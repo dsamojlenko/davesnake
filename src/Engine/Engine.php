@@ -17,6 +17,7 @@ class Engine
     private AvoidWalls $avoidWalls;
     private AvoidSnakes $avoidSnakes;
     private RandomMove $randomMove;
+    private FindFood $findFood;
 
     public function __construct($data)
     {
@@ -29,6 +30,7 @@ class Engine
         $this->randomMove = new RandomMove();
         $this->avoidWalls = new AvoidWalls();
         $this->avoidSnakes = new AvoidSnakes();
+        $this->findFood = new FindFood($data);
     }
 
     private function lookForFood($spaces)
@@ -76,6 +78,14 @@ class Engine
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves, $this->board, $this->me);
 
         $move = $this->randomMove->getMove($this->possibleMoves);
+
+        foreach ($this->possibleMoves as $checkMove) {
+            if ($this->findFood->findFood($checkMove)) {
+                $move = $checkMove;
+            }
+        }
+
+
       
         // if (!$move = $this->lookForFood(1)) {
         //   if (!$move = $this->lookForFood(2)) {
