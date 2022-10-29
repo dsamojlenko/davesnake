@@ -82,6 +82,7 @@ class Engine
         foreach ($this->possibleMoves as $checkMove) {
             if ($this->findFood->findFood($checkMove, 1)) {
                 $move = $checkMove;
+                error_log("found food one space away");
                 break;
             }
         }
@@ -90,6 +91,7 @@ class Engine
             foreach ($this->possibleMoves as $checkMove) {
                 if ($this->findFood->findFood($checkMove, 2)) {
                     $move = $checkMove;
+                    error_log("found food two spaces away");
                     break;
                 }
             }
