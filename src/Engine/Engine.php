@@ -29,8 +29,13 @@ class Engine
         $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves);
         $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
 
-        // If there's food within one or two spaces, grab it
-        $move = $this->nearbyFood->findFood($this->possibleMoves);
+        // Eliminate Hazards
+        // Watch for snake heads
+
+        // Follow tail
+
+        // Head towards food within the radius
+        $move = $this->nearbyFood->findFood($this->possibleMoves, 3);
 
         // finally, random
         if (!$move) {

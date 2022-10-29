@@ -20,7 +20,7 @@ class NearbyFood
         $this->me = new BattleSnake($data->you);
     }
 
-    public function findFood(array $possibleMoves)
+    public function findFood(array $possibleMoves, int $radius = 0)
     {
         error_log("[NearbyFood] Looking for food");
         if (count($this->board->food)) {
@@ -49,15 +49,18 @@ class NearbyFood
             });
 
             $closest = new Coordinates($foodDistances[0]);
-
             error_log("[NearbyFood] Closest " . print_r($closest, true));
 
-            $targetDirections = array_values(array_intersect($this->getTargetDirections($closest), $possibleMoves));
+            if ($foodDistances[0]->distance < $radius || $radius === 0) {
+                $targetDirections = array_values(array_intersect($this->getTargetDirections($closest), $possibleMoves));
 
-            if (count($targetDirections)) {
-              error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
-              return $targetDirections[0];
+                if (count($targetDirections)) {
+                  error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
+                  return $targetDirections[0];
+                }
             }
+            error_log("[NearbyFood] No food within radius");
+            return false;
         }
 
         error_log("[NearbyFood] No food!");
