@@ -80,18 +80,11 @@ class Engine
         $move = $this->randomMove->getMove($this->possibleMoves);
 
         foreach ($this->possibleMoves as $checkMove) {
-            if ($this->findFood->findFood($checkMove)) {
+            if ($this->findFood->findFood($checkMove, 1)) {
                 $move = $checkMove;
+                break;
             }
         }
-
-
-      
-        // if (!$move = $this->lookForFood(1)) {
-        //   if (!$move = $this->lookForFood(2)) {
-        //     $move =  $this->possibleMoves[array_rand($this->possibleMoves)];
-        //   }
-        // }
       
         error_log("Moving: " . ($move ? $move : "Oh no, nowhere to go!"));
 

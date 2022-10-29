@@ -19,7 +19,7 @@ class FindFood
         $this->me = new BattleSnake($data->you);
     }
 
-    public function findFood(string $move)
+    public function findFood(string $move, integer $distance): bool
     {
         $x = 0;
         $y = 0;
@@ -27,18 +27,18 @@ class FindFood
         switch($move) {
             case 'up':
                 $x = $this->me->head->x;
-                $y = $this->me->head->y + 1;
+                $y = $this->me->head->y + $distance;
                 break;
             case 'down':
                 $x = $this->me->head->x;
-                $y = $this->me->head->y - 1;
+                $y = $this->me->head->y - $distance;
                 break;
             case 'left':
-                $x = $this->me->head->x - 1;
+                $x = $this->me->head->x - $distance;
                 $y = $this->me->head->y;
                 break;
             case 'right':
-                $x = $this->me->head->x + 1;
+                $x = $this->me->head->x + $distance;
                 $y = $this->me->head->y;
                 break;
         }
