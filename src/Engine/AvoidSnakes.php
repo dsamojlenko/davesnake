@@ -12,14 +12,10 @@ class AvoidSnakes
     public $board;
     public $me;
 
-    public function __construct(Board $board, BattleSnake $me)
+    public function getMoves($possibleMoves, Board $board, BattleSnake $me)
     {
-        $this->board = $board;
+      $this->board = $board;
         $this->me = $me;
-    }
-
-    public function getMoves($possibleMoves)
-    {
         // Avoid snakes
         foreach ($this->board->snakes as $snake) {
             foreach($snake->body as $part) {

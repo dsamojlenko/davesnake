@@ -11,15 +11,12 @@ class AvoidWalls
 {
   public $board;
   public $me;
-  
-  public function __construct(Board $board, BattleSnake $me)
+
+  public function getMoves($possibleMoves, Board $board, BattleSnake $me)
   {
     $this->board = $board;
     $this->me = $me;
-  }
-
-  public function getMoves($possibleMoves)
-  {
+    
       // Check for walls
       foreach($possibleMoves as $move) {
           // Check up
