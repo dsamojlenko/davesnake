@@ -33,6 +33,7 @@ class NearbyFood
         }
 
         // nothing in range, where the hell is the food?
+        error_log("[NearbyFood] Nothing nearby, looking around");
         if (count($this->board->food)) {
             $foodDistances = [];
 
@@ -64,28 +65,28 @@ class NearbyFood
 
             error_log("[NearbyFood] Next closest " . print_r($closest, true));
 
-            $moves = [];
+            $targetDirections = [];
 
             if ($closest->x < $this->me->head->x) {
-                array_push($moves, MoveTypes::$LEFT);
+                array_push($targetDirections, MoveTypes::$LEFT);
             }
 
             if ($closest->x > $this->me->head->x) {
-                array_push($moves, MoveTypes::$RIGHT);
+                array_push($targetDirections, MoveTypes::$RIGHT);
             }
 
             if ($closest->y < $this->me->head->y) {
-                array_push($moves, MoveTypes::$DOWN);
+                array_push($targetDirections, MoveTypes::$DOWN);
             }
 
             if ($closest->y > $this->me->head->y) {
-                array_push($moves, MoveTypes::$UP);
+                array_push($targetDirections, MoveTypes::$UP);
             }
 
-            $moves = array_intersect($moves, $possibleMoves);
+            $targetDirections = array_intersect($targetDirections, $possibleMoves);
 
-            error_log("[NearbyFood] Nothing close by, heading further afield " . $moves[0]);
-            return $moves[0];
+            error_log("[NearbyFood] Nothing close by, heading further afield " . $targetDirections[0]);
+            return $targetDirections[0];
         }
 
         error_log("[NearbyFood] No food!");
@@ -116,9 +117,7 @@ class NearbyFood
                 break;
         }
 
-        $target =  new Coordinates((object) [ "x" => $x, "y" => $y]);
-
-        return $target;
+        return new Coordinates((object) [ "x" => $x, "y" => $y]);
     }
 
     public function checkForFood(Coordinates $target): bool
