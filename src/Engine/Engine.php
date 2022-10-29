@@ -17,7 +17,7 @@ class Engine
     private AvoidWalls $avoidWalls;
     private AvoidSnakes $avoidSnakes;
     private RandomMove $randomMove;
-    private FindFood $findFood;
+    private NearbyFood $nearbyFood;
 
     public function __construct($data)
     {
@@ -28,59 +28,20 @@ class Engine
         $this->possibleMoves = ['up', 'down', 'left', 'right'];
 
         $this->randomMove = new RandomMove();
-        $this->avoidWalls = new AvoidWalls();
-        $this->avoidSnakes = new AvoidSnakes();
-        $this->findFood = new FindFood($data);
-    }
-
-    private function lookForFood($spaces)
-    {
-        error_log("Looking for food " . $spaces);
-
-        // Look for nearby food
-        foreach ($this->board->food as $food) {
-            // Check up
-            if (in_array('up', $this->possibleMoves)) {
-                if ($this->me->head->y + $spaces == $food->y && $this->me->head->x == $food->x) {
-                    error_log("Found some food");
-                    return 'up';
-                }
-            }
-            // Check down
-            if (in_array('down', $this->possibleMoves)) {
-                if ($this->me->head->y - $spaces == $food->y && $this->me->head->x == $food->x) {
-                    error_log("Found some food");
-                    return 'down';
-                }
-            }
-            // Check right
-            if (in_array('right', $this->possibleMoves)) {
-                if ($this->me->head->x + $spaces == $food->x && $this->me->head->y == $food->y) {
-                    error_log("Found some food");
-                    return 'right';
-                }
-            }
-            // Check left
-            if (in_array('left', $this->possibleMoves)) {
-                if ($this->me->head->x - $spaces == $food->x && $this->me->head->y == $food->y) {
-                    error_log("Found some food");
-                    return 'left';
-                }
-            }
-        }
-      error_log("No food found");
-      return false;
+        $this->avoidWalls = new AvoidWalls($data);
+        $this->avoidSnakes = new AvoidSnakes($data);
+        $this->nearbyFood = new NearbyFood($data);
     }
 
     public function getMove()
     {
-        $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves, $this->board, $this->me);
-        $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves, $this->board, $this->me);
+        $this->possibleMoves = $this->avoidWalls->getMoves($this->possibleMoves);
+        $this->possibleMoves = $this->avoidSnakes->getMoves($this->possibleMoves);
 
         $move = false;
 
         foreach ($this->possibleMoves as $checkMove) {
-            if ($this->findFood->findFood($checkMove, 1)) {
+            if ($this->nearbyFood->findFood($checkMove, 1)) {
                 $move = $checkMove;
                 error_log("found food one space away");
                 break;
@@ -89,7 +50,7 @@ class Engine
 
         if (!$move) {
             foreach ($this->possibleMoves as $checkMove) {
-                if ($this->findFood->findFood($checkMove, 2)) {
+                if ($this->nearbyFood->findFood($checkMove, 2)) {
                     $move = $checkMove;
                     error_log("found food two spaces away");
                     break;

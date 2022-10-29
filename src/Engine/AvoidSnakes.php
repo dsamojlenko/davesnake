@@ -9,13 +9,17 @@ use DaveSnake\Models\Board;
 
 class AvoidSnakes
 {
-    public $board;
-    public $me;
+    private Board $board;
+    private BattleSnake $me;
 
-    public function getMoves($possibleMoves, Board $board, BattleSnake $me)
+    public function __construct($data)
     {
-      $this->board = $board;
-        $this->me = $me;
+        $this->board = new Board($data->board);
+        $this->me = new BattleSnake($data->you);
+    }
+
+    public function getMoves($possibleMoves)
+    {
         // Avoid snakes
         foreach ($this->board->snakes as $snake) {
             foreach($snake->body as $part) {

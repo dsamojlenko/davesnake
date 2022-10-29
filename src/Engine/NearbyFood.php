@@ -8,7 +8,7 @@ use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
 
-class FindFood
+class NearbyFood
 {
     private Board $board;
     private BattleSnake $me;
