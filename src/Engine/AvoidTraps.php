@@ -14,23 +14,30 @@ class AvoidTraps extends AvoidanceBaseClass implements AvoidanceInterface
         error_log("[AvoidTraps] Looking ahead to check for exits");
         foreach($possibleMoves as $move) {
             $target = $this->getMoveTargetCoordinates($move, 1);
-            error_log("[AvoidTraps] oldMe: " . print_r($this->me->body, true));
-            $newMe = $this->me;
-            $newBody = $newMe->body;
-//            $newMe->head = new Coordinates($newBody[0]);
-            array_unshift($newBody, $target); // pop a new head on
-            array_pop($newBody); // pop my tail off
-            $newMe->body = $newBody;
-            error_log("[AvoidTraps] newMe: " . print_r($newMe->body, true));
-            $next = new Engine((object)[
-                "board" => $this->board,
-                "you" => $newMe,
-            ]);
 
-            $newPossibleMoves = $next->getPossibleMoves();
-            error_log("[AvoidTraps] nextPossibleMoves: " . print_r($newPossibleMoves, true));
-            error_log("[AvoidTraps] nextMe: " . print_r($next->me->head, true));
-            if(!count($newPossibleMoves)) {
+            $allHazards = [];
+            foreach($this->board->snakes as $snake) {
+                $allHazards = array_merge($allHazards, $snake->body);
+            }
+
+            $adjacentCells = $this->board->getAdjacentCells($target);
+            $adjacentCells = array_values(array_map(function($coordinate) {
+                return (object)[
+                    "x" => $coordinate->x,
+                    "y" => $coordinate->y,
+                ];
+            }, $adjacentCells));
+
+            // $boardHazards = [...$this->board->hazards];
+            $allHazards = array_merge($allHazards, $this->board->hazards);
+
+            $intersection = array_uintersect($allHazards, $adjacentCells, function($a, $b) {
+                return strcmp(spl_object_hash($a), spl_object_hash($b));
+            });
+
+            error_log("[AvoidTraps] intersection: " . print_r($intersection, true));
+
+            if(!empty($intersection)) {
                 $possibleMoves = $this->eliminateMove($possibleMoves, $move);
             }
         }
