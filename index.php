@@ -5,7 +5,11 @@ use DaveSnake\Router;
 
 require __DIR__.'/vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
-$dotenv->load();
+try {
+    $dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
+    $dotenv->load();
+} catch (Exception $e) {
+    // do nothing
+}
 
 $router = new Router(new Request);
