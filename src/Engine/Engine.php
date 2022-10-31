@@ -6,11 +6,12 @@ namespace DaveSnake\Engine;
 
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
+use DaveSnake\Models\Coordinates;
 
 class Engine
 {
     protected array $possibleMoves;
-    protected BattleSnake $me;
+    public BattleSnake $me;
     protected Board $board;
 
     protected AvoidWalls $avoidWalls;
@@ -19,10 +20,10 @@ class Engine
     protected FoodFinder $foodFinder;
     protected AvoidHazards $avoidHazards;
     protected AvoidSnakeHeads $avoidSnakeHeads;
+    protected AvoidTraps $avoidTraps;
 
     public function __construct($data)
     {
-        $this->possibleMoves = ['up', 'down', 'left', 'right'];
         $this->me = new BattleSnake($data->you);
         $this->board = new Board($data->board);
 
@@ -32,18 +33,28 @@ class Engine
         $this->foodFinder = new FoodFinder($data);
         $this->avoidHazards = new AvoidHazards($data);
         $this->avoidSnakeHeads = new AvoidSnakeHeads($data);
+        $this->avoidTraps = new AvoidTraps($data);
+    }
+
+    public function getPossibleMoves(): array
+    {
+        $possibleMoves = ['up', 'down', 'left', 'right'];
+
+        // Avoid walls, snakes, and hazards
+        $possibleMoves = $this->avoidWalls->filterMoves($possibleMoves);
+        $possibleMoves = $this->avoidHazards->filterMoves($possibleMoves);
+        $possibleMoves = $this->avoidSnakes->filterMoves($possibleMoves);
+
+        // Avoid snake heads I can't beat
+        return $this->avoidSnakeHeads->filterMoves($possibleMoves);
     }
 
     public function getMove()
     {
-        // Avoid walls, snakes, and hazards
-        $this->possibleMoves = $this->avoidWalls->filterMoves($this->possibleMoves);
-        $this->possibleMoves = $this->avoidHazards->filterMoves($this->possibleMoves);
-        $this->possibleMoves = $this->avoidSnakes->filterMoves($this->possibleMoves);
-        $this->possibleMoves = $this->avoidSnakeHeads->filterMoves($this->possibleMoves);
+        $this->possibleMoves = $this->getPossibleMoves($this->me->head);
 
-        // Look ahead a bit and check for traps?
-        // When all else fails, follow tail
+        // Look ahead a bit and check for dead ends
+        $this->possibleMoves = $this->avoidTraps->filterMoves($this->possibleMoves);
 
         $move = false;
 
