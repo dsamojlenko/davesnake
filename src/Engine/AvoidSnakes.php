@@ -11,6 +11,7 @@ class AvoidSnakes extends AvoidanceBaseClass implements AvoidanceInterface
         $head = $this->me->head;
         $tail = end($this->me->body);
 
+        // @TODO: Worry about tail if I just ate (gonna need state)
         foreach ($this->board->snakes as $snake) {
             foreach($snake->body as $part) {
                 if($head->y + 1 == $part->y && $head->x == $part->x) {
