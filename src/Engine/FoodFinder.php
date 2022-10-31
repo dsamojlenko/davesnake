@@ -9,7 +9,7 @@ use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
 
-class NearbyFood
+class FoodFinder
 {
     private Board $board;
     private BattleSnake $me;
@@ -22,7 +22,26 @@ class NearbyFood
         $this->me = new BattleSnake($data->you);
     }
 
-    public function findFood(array $possibleMoves, int $radius = 0)
+    public function findAdjacentFood(array $possibleMoves)
+    {
+        $food = array_map(function($location) {
+            return new Coordinates($location);
+        }, $this->getAvailableFood());
+
+        $head = new Coordinates($this->me->head);
+
+        $adjacents = $this->board->getAdjacentCells($head);
+
+        foreach($possibleMoves as $move) {
+            if (in_array($adjacents[$move], $food)) {
+                return $move;
+            }
+        }
+
+        return false;
+    }
+
+    public function findFoodInRadius(array $possibleMoves, int $radius = 0)
     {
         error_log("[NearbyFood] Looking for food");
         if (count($this->board->food)) {
@@ -45,6 +64,11 @@ class NearbyFood
 
         error_log("[NearbyFood] No food!");
         return false;
+    }
+
+    public function getAvailableFood()
+    {
+        return $this->board->food;
     }
 
     /**

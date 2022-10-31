@@ -16,7 +16,7 @@ class Engine
     protected AvoidWalls $avoidWalls;
     protected AvoidSnakes $avoidSnakes;
     protected RandomMove $randomMove;
-    protected NearbyFood $nearbyFood;
+    protected FoodFinder $foodFinder;
     protected AvoidHazards $avoidHazards;
     protected AvoidSnakeHeads $avoidSnakeHeads;
 
@@ -29,7 +29,7 @@ class Engine
         $this->randomMove = new RandomMove();
         $this->avoidWalls = new AvoidWalls($data);
         $this->avoidSnakes = new AvoidSnakes($data);
-        $this->nearbyFood = new NearbyFood($data);
+        $this->foodFinder = new FoodFinder($data);
         $this->avoidHazards = new AvoidHazards($data);
         $this->avoidSnakeHeads = new AvoidSnakeHeads($data);
     }
@@ -43,18 +43,15 @@ class Engine
         $this->possibleMoves = $this->avoidSnakeHeads->filterMoves($this->possibleMoves);
 
         // Look ahead a bit and check for traps?
-
         // When all else fails, follow tail
+
         $move = false;
 
-        // When health is good, look for food only in immediate vicinity
-        if ($this->me->health > 75) {
-            $move = $this->nearbyFood->findFood($this->possibleMoves, (int) ($this->board->width / 2));
-        }
+        // Grab food in any adjacent cells
+        $move = $this->foodFinder->findAdjacentFood($this->possibleMoves);
 
-        // Getting low, better search all over
-        if ($this->me->health < 50) {
-            $move = $this->nearbyFood->findFood($this->possibleMoves, 0);
+        if (!$move) {
+            $move = $this->foodFinder->findFoodInRadius($this->possibleMoves, 0);
         }
 
         // finally, random if there's anything left

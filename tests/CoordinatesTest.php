@@ -1,6 +1,6 @@
 <?php
 
-test('example', function () {
+test('Convert coordinates to locationId', function () {
     $board = new \DaveSnake\Models\Board((object) [
         "width" => 11,
         "height" => 11,
