@@ -22,9 +22,9 @@ class Router
             case "/":
                 $apiversion = "1";
                 $author     = "dsamojlenko";
-                $color      = "#900C3F";
-                $head       = "smile";
-                $tail       = "bolt";
+                $color      = getenv("SNAKE_COLOUR") ?: "#900C3F";
+                $head       = getenv("SNAKE_HEAD") ?: "smile";
+                $tail       = getenv("SNAKE_TAIL") ?: "bolt";
 
                 Api::indexResponse($apiversion,$author,$color,$head, $tail);
                 break;

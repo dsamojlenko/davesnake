@@ -1,7 +1,8 @@
 {
   "require": {
     "heroku/heroku-buildpack-php": "^226.0",
-    "jmgq/a-star": "^2.1"
+    "jmgq/a-star": "^2.1",
+    "vlucas/phpdotenv": "^5.5"
   },
   "autoload": {
     "psr-4": {
