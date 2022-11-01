@@ -106,6 +106,7 @@ class Engine
 
     public function peekAhead($possibleMoves)
     {
+        error_log("[peekAhead] remaining before peek: " . print_r($possibleMoves, true));
         $snakeParts = $this->getSnakeBodies();
         $allHazards = [...$snakeParts, ...$this->board->hazards];
 
@@ -123,14 +124,16 @@ class Engine
 
             $targetAdjacentCells = $this->helpers->getAdjacentCells($target, [$except]);
 
-            foreach($targetAdjacentCells as $newTarget)
-            {
-                error_log(print_r($newTarget, true));
-                error_log(print_r($allHazards, true));
-                if ($this->helpers->findTargetInArray($newTarget, $allHazards)) {
+            error_log("[peekAhead]: targetAdjacentCells" . print_r($targetAdjacentCells, true));
+
+            if(isset($targetAdjacentCells[$move])) {
+                error_log("[peekAhead] checking: " . print_r($targetAdjacentCells[$move], true));
+                if($this->helpers->findTargetInArray($targetAdjacentCells[$move], $allHazards)) {
+                    error_log("[peekAhead] found and eliminating " . $move);
                     return false;
                 }
             }
+
             return true;
         });
     }
@@ -140,7 +143,8 @@ class Engine
         $possibleMoves = ['up', 'down', 'left', 'right'];
         $possibleMoves = $this->avoidWalls($possibleMoves);
         $possibleMoves = $this->avoidSnakes($possibleMoves);
-        // $possibleMoves = $this->peekAhead($possibleMoves);
+        $possibleMoves = $this->peekAhead($possibleMoves);
+        error_log("[peekAhead] remaining after peek: " . print_r($possibleMoves, true));
         // avoid or attack snake heads
 
         if(!$possibleMoves) {
