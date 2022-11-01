@@ -84,13 +84,13 @@ class Engine
         return false;
     }
 
-    public function followTail($possibleMoves)
+    public function followTail($possibleMoves, $lengthThreshold = 5, $healthThreshold = 50)
     {
-        if(count($this->me->body) < 5) {
+        if(count($this->me->body) < $lengthThreshold) {
             return false;
         }
 
-        if($this->me->health < 50) {
+        if($this->me->health < $healthThreshold) {
             return false;
         }
 
@@ -107,7 +107,7 @@ class Engine
     public function peekAhead($possibleMoves)
     {
         $snakeParts = $this->getSnakeBodies();
-        $allHazards = [...$snakeParts, $this->board->hazards];
+        $allHazards = [...$snakeParts, ...$this->board->hazards];
 
         return array_filter($possibleMoves, function($move) use ($allHazards) {
             $target = $this->getMoveTargetCoordinates($move, 1);
@@ -125,6 +125,8 @@ class Engine
 
             foreach($targetAdjacentCells as $newTarget)
             {
+                error_log(print_r($newTarget, true));
+                error_log(print_r($allHazards, true));
                 if ($this->helpers->findTargetInArray($newTarget, $allHazards)) {
                     return false;
                 }
@@ -138,7 +140,7 @@ class Engine
         $possibleMoves = ['up', 'down', 'left', 'right'];
         $possibleMoves = $this->avoidWalls($possibleMoves);
         $possibleMoves = $this->avoidSnakes($possibleMoves);
-        // avoid obstacles
+        // $possibleMoves = $this->peekAhead($possibleMoves);
         // avoid or attack snake heads
 
         if(!$possibleMoves) {
@@ -149,7 +151,7 @@ class Engine
         $move = $this->findAdjacentFood($possibleMoves);
 
         if(!$move) {
-            $move = $this->followTail($possibleMoves);
+            $move = $this->followTail($possibleMoves, 10, 25);
         }
 
         if(!$move) {
