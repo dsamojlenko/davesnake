@@ -56,36 +56,44 @@ class Helpers
         return false;
     }
 
-    public function getAdjacentCells(object $target): array
+    public function getAdjacentCells(object $target, array $except = []): array
     {
         $adjacentCells = [];
 
-        if ($target->x - 1 >= 0) {
-            $adjacentCells["left"] = (object)[
-                "x" => $target->x - 1,
-                "y" => $target->y
-            ];
+        if(!in_array("left", $except)) {
+            if ($target->x - 1 >= 0) {
+                $adjacentCells["left"] = (object)[
+                    "x" => $target->x - 1,
+                    "y" => $target->y
+                ];
+            }
         }
 
-        if ($target->x + 1 < $this->board->width) {
-            $adjacentCells["right"] = (object)[
-                "x" => $target->x + 1,
-                "y" => $target->y
-            ];
+        if(!in_array("right", $except)) {
+            if ($target->x + 1 < $this->board->width) {
+                $adjacentCells["right"] = (object)[
+                    "x" => $target->x + 1,
+                    "y" => $target->y
+                ];
+            }
         }
 
-        if ($target->y - 1 >= 0) {
-            $adjacentCells["down"] = (object)[
-                "x" => $target->x,
-                "y" => $target->y - 1
-            ];
+        if(!in_array("down", $except)) {
+            if ($target->y - 1 >= 0) {
+                $adjacentCells["down"] = (object)[
+                    "x" => $target->x,
+                    "y" => $target->y - 1
+                ];
+            }
         }
 
-        if ($target->y + 1 < $this->board->height) {
-            $adjacentCells["up"] = (object)[
-                "x" => $target->x,
-                "y" => $target->y + 1
-            ];
+        if(!in_array("up", $except)) {
+            if ($target->y + 1 < $this->board->height) {
+                $adjacentCells["up"] = (object)[
+                    "x" => $target->x,
+                    "y" => $target->y + 1
+                ];
+            }
         }
 
         return $adjacentCells;

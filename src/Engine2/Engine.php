@@ -38,10 +38,7 @@ class Engine
 
     public function avoidSnakes($possibleMoves): array
     {
-        $snakeParts = [];
-        foreach($this->board->snakes as $snake) {
-            $snakeParts = [...$snakeParts, ...$snake->body];
-        }
+        $snakeParts = $this->getSnakeBodies();
 
         return array_filter($possibleMoves, function($move) use ($snakeParts) {
             return !$this->helpers->findTargetInArray($this->getMoveTargetCoordinates($move, 1), $snakeParts);
@@ -107,6 +104,37 @@ class Engine
         return false;
     }
 
+    public function peekAhead($possibleMoves)
+    {
+        $snakeParts = $this->getSnakeBodies();
+        $allHazards = [...$snakeParts, $this->board->hazards];
+
+        $possibleMoves = array_filter($possibleMoves, function($move) use ($allHazards) {
+            $target = $this->getMoveTargetCoordinates($move, 1);
+
+            $except = "";
+            // don't check where we came from
+            if(in_array($move, ["up", "down"])) {
+                $except = $move === "up" ? "down" : "up";
+            }
+            if(in_array($move, ["left", "right"])) {
+                $except = $move === "left" ? "right" : "left";
+            }
+
+            $targetAdjacentCells = $this->helpers->getAdjacentCells($target, [$except]);
+            
+            foreach($targetAdjacentCells as $newTarget)
+            {
+                if ($this->helpers->findTargetInArray($newTarget, $allHazards)) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        return $possibleMoves;
+    }
+
     public function getMove()
     {
         $possibleMoves = ['up', 'down', 'left', 'right'];
@@ -136,5 +164,18 @@ class Engine
 
         error_log("Moving " . $move);
         return $move;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSnakeBodies(): array
+    {
+        $snakeParts = [];
+        foreach ($this->board->snakes as $snake) {
+            $snakeParts = [...$snakeParts, ...$snake->body];
+        }
+
+        return $snakeParts;
     }
 }
