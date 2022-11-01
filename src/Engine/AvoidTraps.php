@@ -31,6 +31,7 @@ class AvoidTraps extends AvoidanceBaseClass implements AvoidanceInterface
                 array_push($potentialMoves, $move);
             }
         }
+
         return $potentialMoves;
     }
 
@@ -45,6 +46,10 @@ class AvoidTraps extends AvoidanceBaseClass implements AvoidanceInterface
             $target = $this->getMoveTargetCoordinates($move, 1);
 
             $potentialMoves = $this->checkNextMove($target);
+
+            if(count($potentialMoves) === 1) {
+                $potentialMoves = $this->checkNextMove($this->getMoveTargetCoordinates(end($potentialMoves), 1));
+            }
 
             if(!$potentialMoves) {
                 $possibleMoves = $this->eliminateMove($possibleMoves, $move);

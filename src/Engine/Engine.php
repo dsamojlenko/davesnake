@@ -21,6 +21,7 @@ class Engine
     protected AvoidHazards $avoidHazards;
     protected AvoidSnakeHeads $avoidSnakeHeads;
     protected AvoidTraps $avoidTraps;
+    protected FollowTail $followTail;
 
     public function __construct($data)
     {
@@ -34,6 +35,7 @@ class Engine
         $this->avoidHazards = new AvoidHazards($data);
         $this->avoidSnakeHeads = new AvoidSnakeHeads($data);
         $this->avoidTraps = new AvoidTraps($data);
+        $this->followTail = new FollowTail($data);
     }
 
     public function getPossibleMoves(): array
@@ -60,6 +62,13 @@ class Engine
 
         // Grab food in any adjacent cells
         $move = $this->foodFinder->findAdjacentFood($this->possibleMoves);
+
+        if($this->me->health < 75) {
+            $move = $this->foodFinder->findFoodInRadius($this->possibleMoves, 4);
+        }
+        
+        // Follow tail
+        $move = $this->followTail->getMove($this->possibleMoves);
 
         if (!$move) {
             $move = $this->foodFinder->findFoodInRadius($this->possibleMoves, 0);
