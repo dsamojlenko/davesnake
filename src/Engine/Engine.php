@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace DaveSnake\Engine;
 
+use DaveSnake\Engine\Concerns\InteractsWithBoard;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 use DaveSnake\Models\Coordinates;
 
 class Engine
 {
+    use InteractsWithBoard;
+
     protected array $possibleMoves;
     public BattleSnake $me;
     protected Board $board;
@@ -66,17 +69,33 @@ class Engine
         if($this->me->health < 75) {
             $move = $this->foodFinder->findFoodInRadius($this->possibleMoves, 4);
         }
-        
+
         // Follow tail
-        $move = $this->followTail->getMove($this->possibleMoves);
+        if (!$move) {
+            $move = $this->followTail->getMove($this->possibleMoves);
+        }
 
         if (!$move) {
             $move = $this->foodFinder->findFoodInRadius($this->possibleMoves, 0);
         }
 
-        // finally, random if there's anything left
+
         if (!$move && count($this->possibleMoves)) {
-            $move = $this->randomMove->getMove($this->possibleMoves);
+            // Prefer heading towards center
+            $center = new Coordinates((object)[
+                "x" => (int)floor($this->board->width / 2),
+                "y" => (int)floor($this->board->width / 2)
+            ]);
+            $directionsToCenter = $this->getDirectionsToTarget($center);
+
+            if ($moves = array_intersect($this->possibleMoves, $directionsToCenter)) {
+                $move = $this->randomMove->getMove($moves);
+            }
+
+            // finally, random if there's anything left
+            if (!$move) {
+                $move = $this->randomMove->getMove($this->possibleMoves);
+            }
         }
       
         error_log("Moving: " . ($move ? $move : "Oh no, nowhere to go!"));

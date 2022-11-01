@@ -7,6 +7,7 @@ namespace DaveSnake\Engine;
 use DaveSnake\Engine\Concerns\InteractsWithBoard;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
+use DaveSnake\Models\Coordinates;
 
 class FollowTail
 {
@@ -24,7 +25,7 @@ class FollowTail
     public function getMove($possibleMoves)
     {
         // where's my tail?
-        $tail = end($this->me->body);
+        $tail = new Coordinates(end($this->me->body));
         $head = $this->me->head;
 
         error_log("[FollowTail] food: " . print_r($this->board->food, true));
@@ -38,12 +39,14 @@ class FollowTail
             return false;
         }
 
+        // think this means I just ate?
         if($this->me->health === 100) {
             return false;
         }
 
         $adjacentCells = $this->board->getAdjacentCells($head);
 
+        // If tail is in an adjacent cell, follow it
         foreach($adjacentCells as $move => $cell) {
             if($tail->x === $cell->x && $tail->y === $cell->y) {
                 if(in_array($move, $possibleMoves)) {
@@ -51,6 +54,14 @@ class FollowTail
                 }
             }
         }
+
+        if($this->getDistanceToTarget($tail) < 4) {
+            $directions = array_intersect($possibleMoves, $this->getDirectionsToTarget($tail));
+            if($directions) {
+                return end($directions);
+            }
+        }
+
         return false;
     }
 }
