@@ -112,6 +112,8 @@ class Engine
         $possibleMoves = ['up', 'down', 'left', 'right'];
         $possibleMoves = $this->avoidWalls($possibleMoves);
         $possibleMoves = $this->avoidSnakes($possibleMoves);
+        // avoid obstacles
+        // avoid or attack snake heads
 
         if(!$possibleMoves) {
             error_log("No moves left...");
