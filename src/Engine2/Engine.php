@@ -61,6 +61,32 @@ class Engine
         return false;
     }
 
+    public function findNearbyFood($possibleMoves, $radius = 5)
+    {
+        $food = array_map(function($food) {
+            return (object)[
+                "x" => $food->x,
+                "y" => $food->y,
+                "distance" => $this->getDistanceToTarget(new Coordinates($food)),
+            ];
+        }, $this->board->food);
+
+        usort($food, function ($a, $b) {
+            return $a->distance <=> $b->distance;
+        });
+
+        $nearest = new Coordinates($food[0]);
+
+        if ($this->getDistanceToTarget($nearest) < $radius) {
+            $directionsToTarget = array_intersect($possibleMoves, $this->getDirectionsToTarget($nearest));
+            if($directionsToTarget) {
+                return end($directionsToTarget);
+            }
+        }
+
+        return false;
+    }
+
     public function followTail($possibleMoves)
     {
         if(count($this->me->body) < 5) {
@@ -73,11 +99,9 @@ class Engine
 
         $tail = new Coordinates(end($this->me->body));
 
-        if($this->getDistanceToTarget($tail) < 4) {
-            $directions = array_intersect($possibleMoves, $this->getDirectionsToTarget($tail));
-            if($directions) {
-                return end($directions);
-            }
+        $directions = array_intersect($possibleMoves, $this->getDirectionsToTarget($tail));
+        if($directions) {
+            return end($directions);
         }
 
         return false;
@@ -98,6 +122,10 @@ class Engine
 
         if(!$move) {
             $move = $this->followTail($possibleMoves);
+        }
+
+        if(!$move) {
+            $move = $this->findNearbyFood($possibleMoves, $this->board->width / 2);
         }
 
         if(!$move) {
