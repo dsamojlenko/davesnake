@@ -109,7 +109,7 @@ class Engine
         $snakeParts = $this->getSnakeBodies();
         $allHazards = [...$snakeParts, $this->board->hazards];
 
-        $possibleMoves = array_filter($possibleMoves, function($move) use ($allHazards) {
+        return array_filter($possibleMoves, function($move) use ($allHazards) {
             $target = $this->getMoveTargetCoordinates($move, 1);
 
             $except = "";
@@ -122,7 +122,7 @@ class Engine
             }
 
             $targetAdjacentCells = $this->helpers->getAdjacentCells($target, [$except]);
-            
+
             foreach($targetAdjacentCells as $newTarget)
             {
                 if ($this->helpers->findTargetInArray($newTarget, $allHazards)) {
@@ -131,8 +131,6 @@ class Engine
             }
             return true;
         });
-
-        return $possibleMoves;
     }
 
     public function getMove()
