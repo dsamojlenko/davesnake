@@ -104,6 +104,12 @@ class Engine
         return false;
     }
 
+    public function isThisMyTail($target)
+    {
+        $tail = new Coordinates(end($this->me->body));
+        return $tail->x === $target->x && $tail->y === $target->y;
+    }
+
     public function peekAhead($possibleMoves)
     {
         error_log("[peekAhead] remaining before peek: " . print_r($possibleMoves, true));
@@ -126,12 +132,25 @@ class Engine
 
             error_log("[peekAhead]: targetAdjacentCells" . print_r($targetAdjacentCells, true));
 
-            if(isset($targetAdjacentCells[$move])) {
-                error_log("[peekAhead] checking: " . print_r($targetAdjacentCells[$move], true));
-                if($this->helpers->findTargetInArray($targetAdjacentCells[$move], $allHazards)) {
-                    error_log("[peekAhead] found and eliminating " . $move);
-                    return false;
+            $potentialMoves = count($targetAdjacentCells);
+
+            foreach($targetAdjacentCells as $cell) {
+                error_log("[peekAhead] checking: " . print_r($cell, true));
+                if($this->helpers->findTargetInArray($cell, $allHazards)) {
+                    // don't worry about my tail
+                    if(!$this->isThisMyTail($cell)) {
+                        $potentialMoves--;
+                    }
                 }
+            }
+
+            if($potentialMoves == 1) {
+
+            }
+
+            if(!$potentialMoves) {
+                error_log("[peekAhead] no potential moves droppping: " . $move);
+                return false;
             }
 
             return true;
@@ -155,7 +174,7 @@ class Engine
         $move = $this->findAdjacentFood($possibleMoves);
 
         if(!$move) {
-            $move = $this->followTail($possibleMoves, 10, 25);
+            $move = $this->followTail($possibleMoves, 10, 75);
         }
 
         if(!$move) {
