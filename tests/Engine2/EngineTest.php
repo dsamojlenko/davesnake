@@ -24,9 +24,9 @@ test("findTargetInArray", function() {
         "customizations" => (object)[]
     ]);
 
-    $engine = new DaveSnake\Engine2\Engine((object) [
+    $helpers = new \DaveSnake\Engine2\Helpers((object)[
         "board" => $board,
-        "you" => $me,
+        "you" => $me
     ]);
 
     $arrayOfLocations = [
@@ -61,7 +61,7 @@ test("findTargetInArray", function() {
         "y" => 2,
     ];
 
-    $found = $engine->findTargetInArray($target, $arrayOfLocations);
+    $found = $helpers->findTargetInArray($target, $arrayOfLocations);
     expect($found)->toBeTrue();
 
     $target = (object) [
@@ -69,7 +69,7 @@ test("findTargetInArray", function() {
         "x" => 1,
     ];
 
-    $found = $engine->findTargetInArray($target, $arrayOfLocations);
+    $found = $helpers->findTargetInArray($target, $arrayOfLocations);
     expect($found)->toBeTrue();
 
     $target = (object) [
@@ -77,6 +77,6 @@ test("findTargetInArray", function() {
         "y" => 6,
     ];
 
-    $found = $engine->findTargetInArray($target, $arrayOfLocations);
+    $found = $helpers->findTargetInArray($target, $arrayOfLocations);
     expect($found)->toBeFalse();
 });
