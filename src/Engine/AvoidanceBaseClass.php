@@ -4,7 +4,7 @@
 namespace DaveSnake\Engine;
 
 
-use DaveSnake\Engine\Concerns\InteractsWithBoard;
+use DaveSnake\Concerns\InteractsWithBoard;
 use DaveSnake\Models\BattleSnake;
 use DaveSnake\Models\Board;
 

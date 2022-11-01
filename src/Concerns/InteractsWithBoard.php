@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DaveSnake\Engine\Concerns;
+namespace DaveSnake\Concerns;
 
 
 use DaveSnake\Models\Coordinates;

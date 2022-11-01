@@ -73,24 +73,5 @@ class Board
         }
 
         return $adjacentCells;
-
-        return [
-            "left" => new Coordinates((object)[
-                "x" => $target->x -1,
-                "y" => $target->y
-            ]),
-            "right" => new Coordinates((object)[
-                "x" => $target->x +1,
-                "y" => $target->y
-            ]),
-            "up" => new Coordinates((object)[
-                "x" => $target->x,
-                "y" => $target->y +1
-            ]),
-            "down" => new Coordinates((object)[
-                "x" => $target->x,
-                "y" => $target->y -1
-            ]),
-        ];
     }
 }
