@@ -79,11 +79,11 @@ class FoodFinder
         $foodTargets = [];
 
         foreach ($this->board->food as $food) {
-            array_push($foodTargets, (object)[
+            $foodTargets[] = (object)[
                 "x" => $food->x,
                 "y" => $food->y,
                 "distance" => $this->getDistanceToTarget(new Coordinates($food)),
-            ]);
+            ];
         }
 
         usort($foodTargets, function ($a, $b) {
